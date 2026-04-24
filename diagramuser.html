@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagram Batang Rating Cerita Rakyat</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link rel="stylesheet" href="style.css"> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4; /* Latar belakang halaman */
+            margin: 0;
+        }
+
+        .chart-container {
+            width: 60%; /* Lebar kontainer diagram */
+            max-width: 700px; /* Batas lebar maksimum */
+            padding: 20px;
+            background-color: #fff; /* Latar belakang diagram putih */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chart-container">
+        <canvas id="ratingChart"></canvas>
+    </div>
+
+    <script src="scriptuser.js">
+    </script>
+</body>
+</html>

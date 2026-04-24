@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Akun</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="YOUR_INTEGRITY_HASH" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .logo {
+            width: 70px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo img {
+            margin-left: 0;
+            width: 60px;
+        }
+
+        .logo p {
+            font-size: 16px;
+            line-height: 1em;
+            font-weight: 600;
+            color: #6D4A37;
+            margin: 0;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px 0;
+            text-decoration: none;
+            color: #000;
+            transition: color 0.3s ease;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'poppins';
+        }
+
+        .sidebar img {
+            width: 130px;
+            margin-left: 20px;
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .sidebar .edit-icon {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            margin-left: 25px;
+            margin-bottom: 310px;
+            background-color: #fff;
+            border-radius: 50%;
+            padding: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transform: translateX(-50%);
+        }
+
+        .sidebar a {
+            margin-left: 15px;
+            justify-content: center;
+        }
+
+        .logout-button {
+            margin-top: 40px;
+            margin-left: 20px;
+            font-weight: 200;
+        }
+
+        .content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        .content h1 {
+            font-size: 22px;
+            margin-bottom: 40px;
+            margin-left: 60px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            margin-left: 60px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #000;
+            margin-bottom: 8px;
+            font-family: 'poppins'
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        select {
+            width: 70%;
+            padding: 12px;
+            border: 1px solid #94A3B8;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            border-color: #bbb;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-right: 40px;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            top: 50%;
+            right: 32%;
+            transform: translateY(-50%);
+            color: #000;
+            cursor: pointer;
+        }
+
+        .form-group.inline {
+            display: flex;
+            padding-right: 17%;
+        }
+
+        .form-group.inline>div {
+            flex: 1;
+        }
+
+        .mobile-header {
+            display: none;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Poppins"; 
+            background-color: #FFFBE9;
+            color: #000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #FEFDF7;
+            display: flex;
+            flex-direction: column;   
+            max-width: fit-content;
+            align-items: center;
+            padding: 0px 10px;
+            padding: 0px 5px;
+            box-shadow: 0 0 10px #8d8a8a;
+        }
+
+        .nav_logo {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            width: 48px;
+            height: 42px;
+
+        }
+
+        .icon {
+            margin: 20px 6px;
+            width: 30px;
+            height: 30px;;
+            margin: 15px 6px;
+            width: 25px;
+            height: 25px;
+        }
+
+        #active {
+            background-color: #6D4A37;
+            color: #fff;
+            padding: 5px 5px;
+            border-radius: 10px;
+            width: 25px;
+            height: 25px;
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+                width: 90px;
+            }
+
+            .logo img {
+                width: 50px;
+            }
+
+            .logo p {
+                font-size: 14px;
+                line-height: 1em;
+                font-weight: 600;
+                color: #6D4A37;
+                margin: 0;
+            }
+
+            .mobile-header {
+                display: flex;
+                position: sticky;
+                top: 0;
+                background-color: #fff;
+                z-index: 1001;
+            }
+            
+            .content h1 {
+                font-size: 18px;
+                text-align: center;
+            }
+
+            .form-group label {
+                font-size: 12px;
+            }
+
+            input,
+            select {
+                padding: 10px;
+                font-size: 13px;
+            }
+
+            .input-with-icon i {
+                right: 12px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div class="logo">
+                <img src="logoweb.svg" alt="logo web">
+                <p>Gema <br>Nusantara</p>
+            </div>
+
+            <div class="menu-icon" id="menu-icon">
+                <i class="ph ph-list"></i>
+            </div>
+            <img src="profile1.svg" alt="Foto Profil">
+            <div class="edit-icon"><i class="fas fa-pen"></i></div>
+            <a class="active" href="settingakun_baru.html">Pengaturan Akun</a>
+            <a href="dashboard_user.html">Beranda Saya</a>
+            <a href="dashboardsimpan_user.html">Cerita Yang Tersimpan</a>
+            <a href="dashboardsuka_user.html">Cerita Yang Disukai</a>
+            <a href="dashboardulasan_user.html">Riwayat Ulasan</a>
+            <a href="dashboardhistory_user.html">Riwayat Membaca</a>
+            <a href="daftarakun.html" class="logout-button"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+        </div>
+        <div class="content">
+            <h1>Halo, Rangga</h1>
+            <form>
+                <div class="form-group">
+                    <label for="nama">Nama</label>
+                    <div class="input-with-icon">
+                        <input type="text" id="nama" value="Muhammad Rangga">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-with-icon">
+                        <input type="email" id="email" value="rangga123@example.com">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="telepon">Nomor Telepon</label>
+                    <div class="input-with-icon">
+                        <input type="tel" id="telepon" value="+62 123 4567 8910">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-with-icon">
+                        <input type="password" id="password" value="........">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="form-group inline">
+                    <div>
+                        <label for="jenisKelamin">Jenis Kelamin</label>
+                        <select id="jenisKelamin">
+                            <option>Laki-Laki</option>
+                            <option>Perempuan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="negara">Negara</label>
+                        <select id="negara">
+                            <option>Indonesia</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

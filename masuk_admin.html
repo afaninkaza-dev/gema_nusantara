@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masuk</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        height: 100vh;
+        background-color: #F7F4E9;
+    }
+
+    .bagian-kiri {
+        background-color: #F7F4E9;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bagian-kanan {
+        flex: 1;
+        background-color: #fff;
+        border-top-left-radius: 80px;
+        border-bottom-left-radius: 80px;
+        z-index: 1000;
+    }
+
+    .register {
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .logo {
+        width: 380px;
+    }
+
+    .brand {
+        color: #6b4226;
+        font-weight: bolder;
+        font-size: 43px;
+        text-align: center;
+    }
+
+    .welcome h2 {
+        font-size: 48px;
+        font-weight: 600;
+        margin-top: 110px;
+        margin-bottom: 80px;
+    }
+
+    .kotak-input input {
+        display: block;
+        width: 70%;
+        padding: 12px 18px;
+        background-color: #fff;
+        margin-left: 100px;
+        margin-top: 30px;
+        margin-bottom: 20px;
+        color: #fff;
+        border: 1px solid #6b4226;
+        border-radius: 15px;
+        font-size: 14px;
+    }
+
+    .tombol-masuk button {
+        width: 30%;
+        background-color: #6b4226;
+        color: white;
+        border: 1px solid #fff;
+        margin-top: 34px;
+        margin-bottom: 20px;
+        padding: 15px 20px;
+        border-radius: 30px;
+    }
+
+    .tombol-masuk a {
+        background-color: #6D4A36;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    @media (max-width: 900px) {
+        body {
+            flex-direction: column;
+            height: auto;
+            min-height: 100vh;
+        }
+
+        .bagian-kiri {
+            display: none;
+        }
+
+        .bagian-kanan {
+            flex: 1;
+            background-color: #fff;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            z-index: 1000;
+            width: 100%;
+            padding: 40px 20px;
+        }
+
+        .register {
+            width: 100%;
+            max-width: none;
+        }
+
+        .welcome h2 {
+            font-size: 35px;
+            font-weight: 600;
+            margin-top: 70px;
+            margin-bottom: 50px;
+        }
+
+        .kotak-input input {
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tombol-masuk button {
+            width: 100%;
+            max-width: 200px;
+            background-color: #6b4226;
+            color: white;
+            border: 1px solid #fff;
+            margin-top: 15px;
+            margin-bottom: 20px;
+            border-radius: 30px;
+        }
+
+        .tombol-masuk a {
+            background-color: #6D4A36;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="bagian-kiri">
+        <div class="logo-container">
+        <img src="logoweb.png" alt="Logo Gema Nusantara" class="logo img">
+        <h1 class="brand">Gema Nusantara</h1>
+        </div>
+    </div>
+    <div class="bagian-kanan">
+        <div class="register">
+            <div class="welcome">
+                <h2>Masuk</h2>
+            </div>
+            <div class="kotak-input">
+                <input type="text" placeholder="Masukkan email" />
+                <input type="password" placeholder="Masukkan kata sandi" />
+            </div>
+            <div class="tombol-masuk">
+                <button><a href="dasboardwebadmin.html" class="masuk">Masuk</a></button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

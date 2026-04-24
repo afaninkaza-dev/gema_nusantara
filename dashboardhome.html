@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard_admin.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz@0,14..32;1,14..32&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,500&display=swap');
+        body {
+            margin: 0;
+            font-family: "Poppins";
+            background-color: #F6F7F8;
+            color: #000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            height: 100vmax;
+            background-color: #Fff;
+            display: flex;
+            flex-direction: column;
+            max-width: fit-content;
+            align-items: center;
+            padding: 0px 5px;
+            box-shadow: 0 0 10px #8d8a8a;
+        }
+
+        .nav_logo {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            width: 48px;
+            height: 42px;
+        }
+
+        .icon {
+            margin: 15px 6px;
+            width: 25px;
+            height: 25px;
+        }
+
+        #active {
+            background-color: #6D4A37;
+            padding: 5px 5px;
+            border-radius: 10px;
+            width: 25px;
+            height: 25px;
+        }
+
+        #header_dashboard {
+            margin: auto 50px 0px 100px;
+            display: flex;
+            justify-content: start;
+            font-family: 'poppins', sans-serif;
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+        .dashboard {
+            margin: 20px 50px 50px 100px;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            width: max-content;
+
+        }
+
+        .dashboard_kiri {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .rangkum_data {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+        }
+
+        .isi_rangkum {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 20px 10px;
+            background-color: #Fff;
+            border-radius: 8px;
+            border: 1px solid #cccaca;
+            text-align: center;
+        }
+
+        .isi_rangkum h2 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .isi_rangkum img {
+            width: 50px;
+            height: 50px;
+            margin: 0;
+        }
+
+        .isi_rangkum h3 {
+            margin: 0;
+            font-size: 35px;
+            font-weight: 600;
+        }
+
+        .isi_rangkum p {
+            margin: 0;
+            font-size: 8px;
+            font-weight: 600;
+        }
+
+        .isi_rangkum .green {
+            color: rgb(95, 169, 95);
+        }
+
+        .isi_rangkum .red {
+            color: rgb(230, 65, 65);
+        }
+
+        .jumlah_pengunjung {
+            width: 535px;
+            height: 300px;
+            padding: 15px 10px;
+            background-color: #fff;
+            border: 1px solid #cccaca;
+            border-radius: 8px;
+        }
+
+        .jumlah_pengunjung h2 {
+            text-align: center;
+            margin: 0 0 10px 0;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .dashboard_kanan {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cerita_terpopuler {
+            width: 500px;
+            height: 230px;
+            padding: 15px 10px;
+            background-color: #fff;
+            border: 1px solid #cccaca;
+            border-radius: 8px;
+        }
+
+        .rating_tertinggi {
+            width: 500px;
+            height: 240px;
+            padding: 15px 10px;
+            background-color: #fff;
+            border: 1px solid #cccaca;
+            border-radius: 8px;
+        }
+    </style>
+    <link rel="icon" href="logoweb.svg">
+    <title>Gema Nusantara</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <a href="landingpage.html"><img class="nav_logo" src="logoweb.svg" alt="Logo Gema Nusantara"> </a>
+        <a href="dashboardhome.html"><img class="icon" id="active" src="home2.svg"></a>
+        <a href="dashboardbuku.html"><img class="icon" src="book1.svg"></a>
+        <a href="dasboardwebadmin.html"><img class="icon" src="user.svg"></a>
+        <a href=""><img class="icon" src="coment1.svg"></a>
+    </nav>
+
+    <h1><span id="header_dashboard">Dashboard Admin</span></h1>
+
+    <div class="dashboard">
+
+        <div class="dashboard_kiri">
+            <div class="rangkum_data">
+                <div class="isi_rangkum">
+                    <h2>Total Pengguna</h2>
+                    <img src="dashboardAdmin/users1.svg">
+                    <h3>825</h3>
+                    <p><span class="green">+17 Pengguna baru pada bulan ini</span></p>
+                </div>
+
+                <div class="isi_rangkum">
+                    <h2>Total Cerita Rakyat</h2>
+                    <img src="dashboardAdmin/book1.svg">
+                    <h3>113</h3>
+                    <p><span class="green">+2 Cerita baru pada bulan ini</span></p>
+                </div>
+
+                <div class="isi_rangkum">
+                    <h2>Total Penggunjung <br>Bulan Ini</h2>
+                    <img src="dashboardAdmin/users1.svg">
+                    <h3>6.740</h3>
+                    <p><span class="red">9% Lebih rendah dibandingkan <br> bulan sebelumnya</span></p>
+                </div>
+            </div>
+
+            <div class="jumlah_pengunjung">
+                <h2>Jumlah Pengunjung Harian</h2>
+                <canvas id="grafikPengunjung"></canvas>
+            </div>
+        </div>
+
+        <div class="dashboard_kanan">
+            <div class="cerita_terpopuler">
+                <canvas id="grafikTerpopuler"></canvas>
+            </div>
+
+            <div class="rating_tertinggi">
+                <canvas id="grafikRatingTertinggi"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+        // Register plugin once at the beginning
+        Chart.register(ChartDataLabels);
+
+        // Chart 1: Pengunjung
+        const hari = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+        const jumlahPengunjung = [529, 404, 374, 561, 398];
+
+        const ctx1 = document.getElementById('grafikPengunjung').getContext('2d');
+        const gradient = ctx1.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgb(95, 169, 95)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+        const chart1 = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: hari,
+                datasets: [{
+                    label: 'Jumlah Pengunjung',
+                    data: jumlahPengunjung,
+                    fill: true,
+                    backgroundColor: gradient,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    datalabels: {
+                        display: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 100
+                        }
+                    },
+                }
+            }
+        });
+
+        // Chart 2: Terpopuler (Pie Chart)
+        const cerita = ['To Dilaling', 'Bawang Merah dan Bawang Putih', 'Lutung Kasarung', 'Abo Mamongkuroit dan Tulap Si Raksasa'];
+        const jumlahPembaca = [305, 239, 198, 83]; // Changed from strings to numbers
+
+        const ctx2 = document.getElementById('grafikTerpopuler').getContext('2d');
+
+        const chart2 = new Chart(ctx2, {
+            type: 'pie',
+            data: {
+                labels: cerita,
+                datasets: [{
+                    label: 'Jumlah Pembaca',
+                    data: jumlahPembaca,
+                    backgroundColor: ['#8979FF', '#FF928A', '#3CC3DF', '#FFAE4C'],
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Cerita Rakyat Terpopuler Bulan Ini',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        boxWidth: 60,
+                        position: 'right',
+                        labels: {
+                            font: {
+                                size: 10,
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: 'white',
+                        font: {
+                            weight: '500',
+                        },
+                        align: 'center',
+                        anchor: 'center',
+                        display: true,
+                    },
+                },
+                scales: {
+                    y: {
+                        display: false,
+                    },
+                    x: {
+                        display: false,
+                    }
+                }
+            }
+        });
+
+        // Chart 3: Rating Tertinggi
+        const judul = ['Lutung Kasarung', 'Timun Mas', 'Keong Mas', 'To Dilaling'];
+        const dataRatings = [4.83, 4.71, 4.68, 4.52];
+
+        const ctx3 = document.getElementById('grafikRatingTertinggi').getContext('2d');
+
+        const ratingChart = new Chart(ctx3, {
+            type: 'bar',
+            data: {
+                labels: judul,
+                datasets: [{
+                    label: 'Jumlah Rating',
+                    data: dataRatings,
+                    backgroundColor: 'rgba(88, 129, 87, 0.8)',
+                    borderColor: 'rgba(88, 129, 87, 0.8)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Rating Tertinggi Cerita Rakyat',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        display: true,
+                        position: 'bottom'
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        color: 'white',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: function(value) {
+                            return value.toFixed(2);
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('id-ID', {
+                                        minimumFractionDigits: 2
+                                    }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 4,
+                        max: 5,
+                        ticks: {
+                            stepSize: 0.2,
+                            callback: function(value) {
+                                return value.toFixed(1);
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    });
+    </script>
+</body>
+
+</html>

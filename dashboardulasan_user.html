@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard_user_ulasan.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz@0,14..32;1,14..32&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,500&display=swap');
+        body {
+            margin: 0;
+            font-family: "Poppins"; 
+            background-color: #FFFBE9;
+            color: #000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            height:100vmax;
+            background-color: #FEFDF7;
+            display: flex;
+            flex-direction: column;   
+            max-width: fit-content;
+            align-items: center;
+            padding: 0px 5px;
+            box-shadow: 0 0 10px #8d8a8a;
+        }
+
+        .nav_logo {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            width: 48px;
+            height: 42px;
+            
+        }
+
+        .icon {
+            margin: 15px 6px;
+            width: 25px;
+            height: 25px;
+        }
+
+        #active {
+            background-color: #6D4A37;
+            padding: 5px 5px;
+            border-radius: 10px;
+            width: 25px;
+            height: 25px;
+        }
+
+
+        #dashboard_header {
+            margin: auto 50px 0px 100px;
+            display: flex;
+            justify-content: center;
+            font-family: 'poppins', sans-serif;
+            font-size: 30px;
+            font-weight: 400;
+        }
+
+        .ulasan_container {
+            margin: auto 100px 0px 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .ulasan {
+            display: flex;
+            flex-direction: column;
+            background-color: #FEFDF7;
+            border: 2px solid #cccaca;
+            border-radius: 8px;
+        }
+
+        .ulasan_top {
+            background-color: #f3f2f2;
+            padding: 0 30px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #cccaca ;
+        }
+
+        .isi_ulasan {
+            padding: 0 30px;
+        }
+
+        .ulasan h2 {
+            font-size: 18px;
+            font-weight: 500;
+        }
+    </style>
+    <link rel="icon" href="cr_wrapper/logo_web.png">
+    <title>Gema Nusantara</title>
+</head>
+
+<body>
+    <nav>
+        <a href="beranda.html"><img class="nav_logo" src="logoweb.svg" alt="Logo Gema Nusantara"> </a>
+        <a href="dashboard_user.html"><img class="icon"  id="active" src="icon1.svg"></a>
+        <a href="dashboardsuka_suka.html"><img class="icon" src="love.svg"></a>
+        <a href="dashboardsimpan_user.html"><img class="icon" src="bookmark.svg"></a>
+        <a href="dashboardulasan_user.html"><img class="icon" id="active" src="komen.svg"></a>
+        <a href="dashboardhistory_user.html"><img class="icon" src="history.svg"></a>
+    </nav>
+
+    <h1><span id="dashboard_header">Cerita Yang Kamu Sukai</span></h1>
+
+    <div class="ulasan_container">
+        <div class="ulasan">
+            <div class="ulasan_top">
+                <h2>Hari ini</h2>
+                <div class="aksi">
+                <img src="dashboard/edit.svg">
+                <img src="dashboard/trash.svg">
+                </div>
+            </div>
+            <div class="isi_ulasan">
+                <p>“Sebagai orang tua, saya tersentuh dengan pesan moral dalam cerita To Dilaling. Bahwa setiap anak punya potensi besar, terlepas dari latar belakang atau kondisi awalnya”</p>
+                <p>Berkomentar di <a href="baca_cerita_ToDilaling.html">To Dilaling</a></p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

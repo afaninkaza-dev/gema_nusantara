@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/css/icons.css" />
+<title>Masuk</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        height: 100vh;
+        background-color: #F7F4E9;
+    }
+
+    .bagian-kiri {
+        background-color: #F7F4E9;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .bagian-kanan {
+        flex: 1;
+        background-color: #fff;
+        border-top-left-radius: 80px;
+        border-bottom-left-radius: 80px;
+        z-index: 1000;
+    }
+
+    .register {
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .logo {
+        width: 380px;
+    }
+
+    .brand {
+        color: #6b4226;
+        font-weight: bolder;
+        font-size: 43px;
+        text-align: center;
+    }
+
+    .welcome h2 {
+        font-size: 48px;
+        font-weight: 600;
+        margin-top: 110px;
+        margin-bottom: 85px;
+    }
+
+    .tombol-masuk button {
+        width: 65%;
+        background-color: #6b4226;
+        color: white;
+        border: 1px solid #fff;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        padding: 15px 18px;
+        border-radius: 30px;
+    }
+
+    .tombol-masuk a {
+        background-color: #6D4A36;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    @media (max-width: 900px) {
+        body {
+            flex-direction: column;
+            height: auto;
+            min-height: 100vh;
+        }
+
+        .bagian-kiri {
+            display: none;
+        }
+
+        .bagian-kanan {
+            flex: 1;
+            background-color: #fff;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            z-index: 1000;
+            width: 100%;
+            padding: 40px 20px;
+        }
+
+        .register {
+            width: 100%;
+            max-width: none;
+        }
+
+        .welcome h2 {
+            font-size: 35px;
+            font-weight: 600;
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
+
+        .tombol-masuk button {
+            width: 100%;
+            max-width: 300px;
+            background-color: #6b4226;
+            color: white;
+            border: 1px solid #fff;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 30px;
+        }
+
+        .tombol-masuk a {
+            background-color: #6D4A36;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="bagian-kiri">
+        <div class="logo-container">
+        <img src="logoweb.png" alt="Logo Gema Nusantara" class="logo img">
+        <h1 class="brand">Gema Nusantara</h1>
+        </div>
+    </div>
+    <div class="bagian-kanan">
+        <div class="register">
+            <div class="welcome">
+                <h2>Masuk ke Akun</h2>
+            </div>
+            <div class="tombol-masuk">
+                <button><a href="masuk.html" class="masuk"></i>Masuk Sebagai User</a></button>
+                <button><a href="masuk_admin.html" class="masuk"></i>Masuk Sebagai Admin</a></button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

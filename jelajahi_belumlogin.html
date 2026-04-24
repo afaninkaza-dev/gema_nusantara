@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="jelajahi_style.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 70px;
+            font-family: "Poppins";
+            background-color: #FEFDF7;
+            color: #000;
+        }
+
+        nav {
+            background-color: #FEFDF7;
+            font-family: "Inter";
+            padding: 0.5em 1em;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 10px #8d8a8a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            width: 30px;
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+            cursor: pointer;
+        }
+
+        .logo p {
+            font-size: 12px;
+            line-height: 1em;
+            font-weight: 600;
+            color: #6D4A37;
+            margin: 0;
+        }
+
+        nav .profile:hover {
+            transform: scale(1.1);
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #918d8a;
+            font-size: 16px;
+            margin-right: 2em;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #000;
+            font-weight: 700;
+        }
+
+        nav .profile {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .hero {
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins';
+            color: #000;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h2 {
+            font-size: 40px;
+            font-weight: 300;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            font-family: 'poppins';
+            text-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            text-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .search-bar input[type="text"] {
+            padding: 10px;
+            border: 1px solid #000;
+            border-radius: 20px;
+            width: 300px;
+            padding-left: 15px;
+        }
+
+        .search-bar i.fas.fa-search {
+            position: absolute;
+            left: 9px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+        }
+
+        .search-bar button {
+            position: absolute;
+            left: 266px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #000;
+            color: #fff;
+            border: none;
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0; 
+        }
+
+        .section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .section h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .section p {
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .cerita-container {
+            display: grid;
+            grid-template-columns: repeat(4, 200px);
+            gap: 100px;
+            justify-content: center;
+            margin: 150px auto 0;
+            padding: 0 70px 200px;
+        }
+
+        @media (max-width: 1400px) {
+            .cerita-container {
+                grid-template-columns: repeat(4, 200px);
+                gap: 90px;
+            }
+        }
+
+        @media (max-width: 1050px) {
+            .cerita-container {
+                grid-template-columns: repeat(2, 200px);
+                gap: 80px;
+                padding: 0 40px 150px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cerita-container {
+                grid-template-columns: repeat(1, 200px);
+                gap: 70px;
+                padding: 0 20px 100px;
+            }
+            
+            h1 {
+                font-size: 28px;
+                margin: 30px auto;
+            }
+        }
+        .cerita-wrapper {
+            width: 200px;
+            padding: 15px;
+            border-radius: 14px;
+            background-color: #6D4A36;
+            color: #F7F4E9;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sampul {
+            width: 100%;
+            height: 270px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .cerita-wrapper h2 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 15px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .cerita-wrapper hr {
+            margin: 0;
+            border: none;
+            border-top: 1px solid #F7F4E9;
+        }
+
+        /* Rating */
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .star {
+            width: 20px;
+            height: 20px;
+        }
+
+        .rating-number {
+            font-size: 16px;
+            font-weight: 500;
+            margin-right: auto;
+        }
+
+        .icon-small {
+            width: 19px;
+            height: 19px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .icon-small:hover {
+            transform: scale(1.2);
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 40px 15px;
+        }
+
+        footer {
+            background-color: #FFF5E7;
+            text-align: justify;
+            font-family: "Inter";
+            font-size: 14px;
+        }
+
+        .footer_top {
+            padding: 3em 5em;
+            display: flex;
+            flex-flow: row wrap;
+            gap: 150px;
+        }
+
+        #tentang-web, #navigasi, #kontak{
+            max-width: 25em; 
+        }
+
+        footer ul {
+            list-style-type: none;
+            padding-inline-start: 0;
+            line-height: 2em;
+        }
+
+        a {
+            text-decoration: none;
+            color: #000;
+
+        }
+    </style>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="YOUR_INTEGRITY_HASH" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Gema Nusantara</title>
+</head>
+
+<body>
+    <header>
+    <nav>
+        <div class="logo">
+            <a href="landingpage1.html"></a><img src="logoweb.svg" alt="logo web">
+            <p>Gema <br>Nusantara</p>
+        </div>
+        <a href="landingpage1.html">Beranda</a>
+        <a class="active" href="jelajahi_belumlogin.html">Jelajahi</a>
+        <a href="masuksatu.html"></a><img class="profile" src="profile22.svg" alt="user profile">
+    </nav>
+    </header>
+    <section class="hero" id="home">
+        <h2>Menyelami Kisah Tradisi dalam Genggaman Tangan</h2>
+        <div class="search-bar">
+                <input type="text" placeholder="Telusuri judul buku">
+                <button><i class="fas fa-search"></i></button>
+        </div>
+    </section>
+    <div class="cerita-container">
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritakeong.png" alt="Gambar Cerita Keong Mas">
+            <h2>Keong Mas</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritabawang.png" alt="Gambar Cerita Bawang Putih & Bawang Merah">
+            <h2>Bawang Putih & Bawang Merah</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritabiwar.png" alt="Gambar Cerita Biwar & Naga">
+            <h2>Biwar & Naga</h2>
+            <hr>
+            <div class="rating">
+            <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritatimun.png" alt="Gambar Cerita Timun Mas">
+            <h2>Timun Mas</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritapangeran.png" alt="Gambar Cerita Pangeran Amat Mude">
+            <h2>Pangeran Amat Mude</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritasipitung.png" alt="Gambar Cerita Si Pitung">
+            <h2>Si Pitung</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritamenangis.png" alt="Gambar Cerita Batu Menangis">
+            <h2>Batu Menangis</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritalasirimbone.avif" alt="Gambar Cerita La Sirimbone">
+            <h2>La Sirimbone</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritaabo.png" alt="Gambar Cerita Abo Mamongkuroit dan Tulap Si Raksasa">
+            <h2>Abo Mamongkuroit Dan Tulap Si Raksasa</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritagolog.png" alt="Gambar Cerita Batu Golog">
+            <h2>Batu Golog</h2>
+            <hr>
+            <div class="rating">
+               <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritadanau.png" alt="Gambar Cerita Danau Lipan">
+            <h2>Danau Lipan</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritakelingking.png" alt="Gambar Cerita Si Kelingking">
+            <h2>Si Kelingking</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritaputri.png" alt="Gambar Cerita Putri Ular">
+            <h2>Putri Ular</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritarawa.png" alt="Gambar Cerita Rawa Pening">
+            <h2>Rawa Pening</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="cerita62.png" alt="Gambar Cerita Suwidak Loro">
+            <h2>Suwidak Loro</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka">
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+
+        <div class="cerita-wrapper">
+            <img class="sampul" src="ceritatodilaling.png" alt="Gambar Cerita To Dilaling">
+            <h2>To Dilaling</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="simbolsuka.png" title="suka"> 
+                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="footer_top">
+            <div id="tentang-web">
+                <img src="logoweb.png" alt="Logo Gema Nusantara" style="width: 90px; height: auto; margin-right: 20px;">
+                <p>Gema <br> Nusantara</p>
+                <p>Temukan kembali pesona dongeng masa kecil Anda di Gema Nusantara, rumah digital bagi cerita rakyat
+                    yang telah diwariskan turun-temurun, dikemas dalam format yang mudah dinikmati kapan saja. Mari
+                    bersama-sama melestarikan budaya Indonesia dan berbagi kearifan leluhur kepada generasi mendatang
+                </p>
+            </div>
+            <div id="navigasi">
+                <h3>Navigasi</h3>
+                <ul>
+                    <li><a href="beranda.html">Beranda</a></li>
+                    <li><a href="jelajahi.html">Jelajahi</a></li>
+                    <li><a href="saran.html">Saran</a></li>
+                    <li><a href="riwayat.html">Riwayat</a></li>
+                </ul>
+            </div>
+            <div id="kontak">
+                <h3>Kontak Kami</h3>
+                <ul>
+                    <li><a href="https://www.instagram.com/">Instagram</a></li>
+                    <li><a href="https://www.youtube.com/">Youtube</a></li>
+                    <li><a href="https://www.tiktok.com/">Tiktok</a></li>
+                    <li><a href="https://www.twitter.com/">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

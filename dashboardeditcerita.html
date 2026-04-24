@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tambah Cerita Rakyat</title>  
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+    body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #F6F7F8;
+    }
+
+    .container {
+        display: flex;
+        height: 100vh; 
+    }
+
+    .bagian-kiri {
+        flex: 2; 
+        background-color: #F6F7F8;
+        padding: 20px;
+    }
+
+    .bagian-kanan {
+        flex: 1; 
+        background-color: #F6F7F8;
+        padding: 30px;
+    }
+    @media (max-width: 600px) {
+        .container {
+            flex-direction: column; 
+        }
+
+        .bagian-kiri,
+        .bagian-kanan {
+            flex: auto; 
+        }
+    }
+
+    .navbar {
+        width: 80px;
+        background-color: #fff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 15px;
+    }
+
+    .navbar .logo {
+        margin-bottom: 20px;
+    }
+
+    .navbar .logo img {
+        width: 50px;
+    }
+
+    h1 {
+        font-size: 2rem;
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #333;
+        text-align: left;
+    }
+
+    p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    label .kiri {
+        display: block;
+        font-size: 0.9rem;
+        color: #444;
+        margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    textarea {
+        width: 100%;
+        padding: 12px;
+        font-family: 'inter';
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+        color: #333;
+        box-sizing: border-box;
+        resize: vertical;
+        }
+
+    textarea {
+        min-height: 150px;
+        }
+
+    .toolbar {
+        background-color: #f0f0f0;
+        padding: 8px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+
+    .toolbar button {
+        background: none;
+        border: none;
+        padding: 5px 10px;
+        margin-right: 5px;
+        cursor: pointer;
+    }
+
+    .bab-cerita {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        font-family: Arial, sans-serif;
+    }
+
+    .bab-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .bab-item {
+        padding: 10px 15px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        color: #333;
+        cursor: pointer;
+    }
+
+    .bab-item:hover {
+        background-color: #f0f0f0;
+    }
+
+    .bab-cerita .button {
+        background-color: #ddd;
+        color: #333;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 15px;
+        cursor: pointer;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .sampul-cerita {
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        padding: 40px;
+        text-align: center;
+    }
+
+    .sampul-cerita img {
+        width: 30px;
+        margin-bottom: 10px;
+    }
+
+    .form-buttons {
+        text-align: right;
+    }
+
+    .batal-button,
+    .tambah-button {
+        padding: 8px 24px;
+        border: none;
+        border-radius: 12px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .batal-button {
+        background-color: #fff;
+        color: #000;
+        margin-right: 10px;
+        border: 1px solid #94A3B8;
+    }
+
+    .tambah-button {
+        background-color: #6D4A36;
+        color: #fff;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <aside class="navbar">
+        <div class="logo">
+        <img src="logoweb.svg" alt="Logo Website">
+        </div>
+        </aside>
+    <div class="bagian-kiri">
+    <h1>Tambah Cerita Rakyat</h1>
+    <p>Isi detail cerita rakyat mulai dari judul, sinopsis, isi cerita, dan terakhir sampul cerita rakyat.</p>
+
+    <form>
+      <div class="form-group">
+        <label for="judul">Judul</label>
+        <input type="text" id="judul" value="To Dilaling">
+      </div>
+
+      <div class="form-group">
+        <label for="asalDaerah">Asal Daerah Cerita Rakyat</label>
+        <input type="text" id="asalDaerah" value="Sulawesi Barat">
+      </div>
+
+      <div class="form-group">
+        <label for="sinopsis">Sinopsis</label>
+        <textarea id="sinopsis">Di sebuah bukit yang bernama Napo di daerah Tammajarra, Kecamatan Balanipa, Kabupaten Polewali Mandar, Sulawesi Bara, terdiri sebuah kerajaan yang bernama Kerajaan Balanipa yang dipimpin oleh Raja Balanipa. Sudah tiga puluh tahun sang Raja berkuasa, namun tidak mau turun dari tahtanya. Ia ingin berkuasa sepanjang masa. Untuk itu, ia senantiasa menjaga kesehatan badannya dengan cara berolahraga secara teratur, berburu, minum jamu dan obat ramuan tabib terkenal agar tetap awet muda dan panjang umur.</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="isiCerita">Isi Cerita Rakyat</label>
+        <div class="toolbar">
+          <button type="button"><b>B</b></button>
+          <button type="button"><i>I</i></button>
+          <button type="button"><u>U</u></button>
+          <button type="button">H1</button>
+          <button type="button">H2</button>
+          <button type="button"><img src="picture.svg" alt="Image"></button>
+        </div>
+        <textarea id="isiCerita" placeholder="Mulai menulis cerita rakyat disini...">  Di Bukit Napo, Sulawesi Barat berdiri Kerajaan Balanipa yang dipimpin oleh seorang raja yang bernama Raja Balanipa. Raja yang bertubuh tegap itu adalah seorang raja yang ingin berkuasa selamanya. Ia juga seorang raja yang cukup disegani oleh rakyatnya.
+
+   Kerajaan Balanipa ini berada di daerah yang subur. Hasil kekayaan alamnya melimpah dan dapat menambah penghasilan rakyat. Tak heran, Kerajaan Balanipa ini termasuk negeri yang makmur dan sejahtera. 
+
+   Raja Balanipa memimpin rakyatnya dengan bijaksana dan adil. Namun, sikap Raja Balanipa itu sangat bertolak belakang terhadap keluarganya. Bahkan, ia tidak mempunyai rasa kasih sayang dan belas kasihan kepada keluarganya, terutama kepada anak laki lakinya. </textarea>
+      </div>
+      </div>
+      <div class="bagian-kanan">
+      <div class="form-group">
+        <label>Bab Cerita Rakyat</label>
+        <div class="bab-cerita">
+        <ul class="bab-list">
+            <li><a class="bab-item">Bab 1. Kerajaan Balanipa</li>
+            <li class="bab-item">Bab 2. Permaisuri Melahirkan</li>
+            <li class="bab-item">Bab 3. Bayi Putri Mahkota</li>
+        </ul>
+        <button class="button">+ Tambah Bab Baru</button>
+        </div>
+
+      <div class="form-group">
+        <label>Sampul Cerita Rakyat</label>
+        <div class="sampul-cerita">
+          <img src="tambah.svg" alt="Upload Icon">
+          <p>Upload file</p>
+          <p class="file-types">PNG, JPG, atau JPEG</p>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="batal-button">Batalkan</button>
+        <button type="submit" class="tambah-button">+ Tambah Cerita</button>
+      </div>
+    </form>
+    </div>
+    </div>
+</body>
+</html>

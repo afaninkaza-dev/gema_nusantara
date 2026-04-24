@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard_user.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz@0,14..32;1,14..32&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,500&display=swap');
+    </style>
+    <link rel="icon" href="cr_wrapper/logo_web.png">
+    <title>Gema Nusantara</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <a href="beranda.html"><img class="nav_logo" src="cr_wrapper/logo_web.png" alt="Logo Gema Nusantara"> </a>
+        <a href="dashboard_user.html"><img class="icon" id="active" src="sideNavBar/home2.svg"></a>
+        <a href="dashboard_user_suka.html"><img class="icon" src="sideNavBar/love1.png"></a>
+        <a href="dashboard_user_simpan.html"><img class="icon" src="sideNavBar/bookmark1.svg"></a>
+        <a href="dashboard_user_ulasan.html"><img class="icon" src="sideNavBar/comment1.png"></a>
+        <a href="dashboard_user_history.html"><img class="icon" src="sideNavBar/history1.svg"></a>
+    </nav>
+
+    <h1><span id="dashboard_header">Hallo Muhammad</span></h1>
+
+    <section class="dashboard">
+
+        <div class="dashboard_kiri">
+            <div class="rangkum_baca">
+
+                <div class="isi_rangkum">
+                    <h2>Total Cerita Yang Sedang Dibaca</h2>
+                    <div class="rangkum_detail">
+                        <img src="dashboard/book.svg">
+                        <h3>23</h3>
+                    </div>
+                </div>
+
+                <div class="isi_rangkum">
+                    <h2>Total Cerita Yang Selesai Dibaca</h2>
+                    <div class="rangkum_detail">
+                        <img src="dashboard/book.svg">
+                        <h3>8</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <section class="riwayat">
+
+                <div class="riwayat_header">
+                    <h3>Riwayat Membacamu</h3>
+                    <a href="dashboard_user_history.html">Lihat Semua ></a>
+                </div>
+
+                <div class="cerita_container">
+                    <div class="cerita_wrapper">
+                        <img class="sampul" src="cr_wrapper/cover_cr/batu_menangis.jpg"
+                            alt="Gambar Cerita Batu Menangis">
+                        <h2>Batu Menangis</h2>
+                        <hr>
+                        <div class="rating">
+                            <img class="star" src="cr_wrapper/star.png" title="Rating 4.5">
+                            <span class="rating-number">4.4</span>
+                            <img class="icon-small" src="cr_wrapper/like.png" title="Favorite">
+                            <img class="icon-small" src="cr_wrapper/icon.png" title="Share">
+                        </div>
+                    </div>
+
+                    <div class="cerita_wrapper">
+                        <img class="sampul" src="cr_wrapper/cover_cr/batu_menangis.jpg"
+                            alt="Gambar Cerita Batu Menangis">
+                        <h2>Batu Menangis</h2>
+                        <hr>
+                        <div class="rating">
+                            <img class="star" src="cr_wrapper/star.png" title="Rating 4.5">
+                            <span class="rating-number">4.4</span>
+                            <img class="icon-small" src="cr_wrapper/like.png" title="Favorite">
+                            <img class="icon-small" src="cr_wrapper/icon.png" title="Share">
+                        </div>
+                    </div>
+
+                    <div class="cerita_wrapper">
+                        <img class="sampul" src="cr_wrapper/cover_cr/batu_menangis.jpg"
+                            alt="Gambar Cerita Batu Menangis">
+                        <h2>Batu Menangis</h2>
+                        <hr>
+                        <div class="rating">
+                            <img class="star" src="cr_wrapper/star.png" title="Rating 4.5">
+                            <span class="rating-number">4.4</span>
+                            <img class="icon-small" src="cr_wrapper/like.png" title="Favorite">
+                            <img class="icon-small" src="cr_wrapper/icon.png" title="Share">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        </div>
+
+        <div class="dashboard_kanan">
+
+            <div class="jumlah_membaca">
+                <canvas id="grafikMembaca"></canvas>
+            </div>
+
+            <div class="lanjut_baca">
+                <h2>Lanjut Membaca</h2>
+                <div class="isi_baca">
+                    <img src="cr_wrapper/cover_cr/timun_mas.jpg">
+                    <div class="baca_detail">
+                        <h3>Timun Mas</h3>
+
+                        <div class="isi_detail">
+                            <img src="dashboard/clock.svg">
+                            <p>Terakhir dibaca : 18 - 11 - 2025</p>
+                        </div>
+
+                        <div class="isi_detail">
+                            <p>4.5</p>
+                            <p id="star">★★★★★</p>
+                        </div>
+
+                        <div class="isi_detail">
+                            <img src="dashboard/people.svg">
+                            <p>8.1K</p>
+                        </div>
+
+                        <div class="isi_detail">
+                            <img src="dashboard/book_open.svg">
+                            <p>Sisa 2 Bab</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <script src="dashboard_user.js"></script>
+</body>
+
+</html>

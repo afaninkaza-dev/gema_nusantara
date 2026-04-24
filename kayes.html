@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Profile Page | Pengaturan | Informasi Pribadi </title>
+    <link rel="icon" href="img/logo.jpg" />
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap");
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 30px;
+            margin-left: 2px;
+        }
+
+        .logo .gambar-logo {
+            width: 40px;
+        }
+
+        .logo .gambar-nama {
+            width: 155px;
+        }
+
+        .profile-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 20%;
+            background-color: #fff;
+            border-right: 1px solid #e0e0e0;
+            padding: 30px 30px;
+        }
+
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .sidebar li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .sidebar a {
+            color: inherit;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .sidebar a:hover {
+            text-decoration: none;
+            color: #000;
+        }
+
+        .sidebar .language {
+            background-color: #e8e5e3;
+            font-weight: 500;
+        }
+
+        .sidebar img {
+            width: 18px;
+            margin-right: 12px;
+        }
+
+        .profil-content {
+            flex: 1;
+            padding: 50px 70px;
+        }
+
+        .profil-content h2 {
+            font-size: 22px;
+            margin-bottom: 25px;
+        }
+
+        .info-list {
+            background: #fff;
+            border-radius: 12px;
+            padding: 10px 0;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .info img {
+            width: 20px;
+        }
+
+        .info p {
+            flex: 1;
+            margin-left: 10px;
+            font-size: 15px;
+        }
+
+        .edit-button {
+            text-decoration: none;
+            color: #000;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .edit-button:hover {
+            text-decoration: underline;
+        }
+
+
+        .mobile-header {
+            display: none;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hamburger-menu {
+            cursor: pointer;
+            width: 30px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger-menu span {
+            display: block;
+            height: 2px;
+            background-color: #000;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+
+            .profile-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 100vh;
+                position: fixed;
+                top: 90px;
+                left: -100%;
+                transition: left 0.3s ease;
+                z-index: 1000;
+                border-right: none;
+                padding: 20px 30px;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .mobile-header {
+                display: flex;
+                position: sticky;
+                top: 0;
+                background-color: #fff;
+                z-index: 1001;
+            }
+
+            .logo {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                margin-bottom: 0;
+                margin-left: 4px;
+            }
+
+            .logo a {
+                display: flex;
+                align-items: center;
+            }
+
+            .logo .gambar-logo {
+                width: 40px;
+            }
+
+            .logo .gambar-nama {
+                width: 155px;
+            }
+
+            .sidebar .logo {
+                display: none;
+            }
+
+            .profil-content {
+                padding: 0 25px;
+                margin-top: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="mobile-header">
+        <div class="logo">
+            <a href="homePageUdahLogin.html">
+                <img class="gambar-logo" src="img/logo.jpg" alt="Logo TemanSinggah" />
+                <img class="gambar-nama" src="img/brand-name.svg" alt="Nama TemanSinggah" />
+            </a>
+        </div>
+        <div class="hamburger-menu" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <div class="sidebar">
+            <div class="logo">
+                <a href="homePageUdahLogin.html">
+                    <img class="gambar-logo" src="img/logo.jpg" alt="Logo TemanSinggah" />
+                    <img class="gambar-nama" src="img/brand-name.svg" alt="Nama TemanSinggah" />
+                </a>
+            </div>
+            <h2>Pengaturan</h2>
+            <ul>
+                <li class="profile"><img src="img/person.svg" alt="informasiPribadi">Informasi Pribadi</li>
+                <li><a href="profile3.html"><img src="img/icon/language.svg" alt="bahasa"> Bahasa & Mata Uang</a></li>
+                <li><a href="homePage.html"><img src="img/icon/keluar.png" alt="keluar"> Keluar</a></li>
+            </ul>
+        </div>
+
+        <div class="profil-content">
+            <h2>Informasi Pribadi</h2>
+
+            <div class="info-list">
+                <div class="info">
+                    <div>
+                        <p class="label">Nama</p>
+                        <p class="value">Om Gatot</p>
+                    </div>
+                    <a href="#" class="edit-button">Edit</a>
+                </div>
+
+                <div class="info">
+                    <div>
+                        <p class="label">E-mail</p>
+                        <p class="value">OmGatotganteng123@example.com</p>
+                    </div>
+                    <a href="#" class="edit-button">Edit</a>
+                </div>
+
+                <div class="info">
+                    <div>
+                        <p class="label">Password</p>
+                        <p class="value">Gatot123</p>
+                    </div>
+                    <a href="#" class="edit-button">Edit</a>
+                </div>
+
+                <div class="info">
+                    <div>
+                        <p class="label">Bio</p>
+                        <p class="value">Om Ganteng</p>
+                    </div>
+                    <a href="#" class="edit-button">Edit</a>
+                </div>
+
+                <div class="info">
+                    <div>
+                        <p class="label">Kontak</p>
+                        <p class="value">08123456789</p>
+                    </div>
+                    <a href="#" class="edit-button">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const hamburger = document.getElementById("hamburger");
+        const sidebar = document.querySelector(".sidebar");
+
+        hamburger.addEventListener("click", () => {
+            sidebar.classList.toggle("active");
+            hamburger.classList.toggle("open");
+        });
+    </script>
+
+</body>
+
+</html>

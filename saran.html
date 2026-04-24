@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="saran.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz@0,14..32;1,14..32&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,500&display=swap');
+        body {
+            margin: 0;
+            padding-top: 60px;
+            font-family: "Poppins";
+            background-color: #FEFDF7;
+            color: #000;
+        }
+
+        nav {
+            background-color: #FEFDF7;
+            font-family: 'inter';
+            padding: 0.5em 1em;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 0 10px #8d8a8a;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            width: 50px;
+            display: flex;
+            align-items: center;
+            margin-right: auto;
+            cursor: pointer;
+        }
+
+        .logo p {
+            font-size: 12px;
+            line-height: 1em;
+            font-weight: 600;
+            color: #6D4A37;
+            margin: 0;
+        }
+
+        .logo img {
+            width: 100%;
+        }
+
+        nav .profile:hover {
+            transform: scale(1.1);
+        }
+
+        nav a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #918d8a;
+            font-size: 16px;
+            margin-right: 2em;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: #000;
+            font-weight: 700;
+        }
+
+        nav .profile {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .section-top {
+        .saran_header {
+            display: flex;
+            justify-content: start;
+            background: #FFF5E7;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            padding: 40px 100px;
+            position: relative;
+            top:0;
+        }}
+
+        .section-top h1 {
+        .saran_header h1 {
+            font-size: 30px;
+            font-weight: 500;
+            margin: 0;
+            color: #000;
+        }}
+
+        .saran_container {
+            display: flex;
+            flex-direction: column;
+            background-color: #F5F5F5;
+            width: 500px;
+            border-radius: 6px;
+            padding: 2.5em 3em;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            position: absolute;
+            top: 100px;
+            right: 40px;
+            z-index: 999;
+        }
+
+        .saran_container label {
+            font-weight: 500;
+            margin-bottom: 0.5em;
+            margin-top: 1.3em;
+            color: #000;
+            font-size: 14px;
+        }
+
+        .saran_container input,
+        .saran_container textarea {
+            width: 100%;
+            padding: 0.75em 0.9em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: "Poppins";
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #fff;
+        }
+
+        .saran_container input::placeholder,
+        .saran_container textarea::placeholder {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .saran_container input:focus,
+        .saran_container textarea:focus {
+            outline: none;
+            border-color: #6D4A37;
+        }
+
+        .saran_container textarea {
+            resize: vertical;
+            min-height: 200px;
+        }
+
+        .btn-submit {
+        .kirim {
+            width: 100%;
+            padding: 0.85em;
+            background-color: #6D4A37;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-family: "Poppins";
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5em;
+        }}
+
+        .btn-submit:hover {
+        .kirim:hover {
+            background-color: #5a3a2a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(109, 74, 55, 0.3);
+        }}
+
+        .section-bottom {
+        .alasan_saran {
+            background-color: #FEFDF7;
+            padding: 40px 90px;
+            max-width: 1400px;
+            min-height: 400px;
+            margin: 0 auto;
+
+        }}
+
+        .section-bottom h2 {
+        .alasan_saran h2 {
+            font-size: 25px;
+            font-weight: 400;
+            margin-bottom: 1em;
+            color: #000;
+        }}
+
+        .section-bottom ul {
+        .alasan_saran ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+            line-height: 1.5;
+            color: #333;
+            font-size: 13px;
+        }}
+
+        .section-bottom li {
+        .alasan_saran li {
+            margin-bottom: 0.7em;
+        }}
+
+        footer {
+            background-color: #FFF5E7;
+            text-align: justify;
+            font-family: "Inter";
+            font-size: 14px;
+            margin-top: 300px;
+        }
+
+        .footer_top {
+            padding: 3em 4em;
+            display: flex;
+            gap: 150px;
+        }
+
+        .footer_bottom {
+            padding: 0.5em 4em;
+            text-align: center;
+        }
+
+        .footer_bottom hr {
+            border-top: 1.2px solid #000000;
+        }
+
+        #tentang-web,
+        #navigasi,
+        #kontak {
+            max-width: 25em;
+        }
+
+        footer ul {
+            list-style-type: none;
+            padding-inline-start: 0;
+            line-height: 2em;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #000;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .section-top {
+            .saran_header {
+                grid-template-columns: 1fr;
+                gap: 2.5em;
+                padding: 2.5em 1.5em 5em 1.5em;
+            }}
+
+            .section-top h1 {
+            .saran_header h1 {
+                font-size: 2em;
+                text-align: center;
+            }}
+
+            .saran_container {
+                padding: 2em 2.5em;
+            }
+
+            .section-bottom {
+            .alasan_saran {
+                padding: 3em 1.5em 4em 1.5em;
+            }}
+        }
+    </style>
+    <link rel="icon" href="logoweb.svg">
+    <title>Gema Nusantara</title>
+</head>
+
+<body>
+    <nav>
+        <div class="logo">
+            <img src="logoweb.svg" alt="Logo Gema Nusantara">
+            <p>Gema <br> Nusantara</p>
+        </div>
+        <a href="landingpage.html">Beranda</a>
+        <a href="jelajahi.html">Jelajahi</a>
+        <a class="active" href="saran.html">Saran</a>
+        <img class="profile" src="profile22.svg" alt="User Icon">
+    </nav>
+
+    <section class="saran_header">
+        <h1>Usul Buku Dengan Hati,<br>Budaya Baca Lestari</h1>
+    </section>
+
+    <div class="saran_container">
+        <div class="logo">
+            <img src="logoweb.svg" alt="Logo Gema Nusantara">
+            <p>Gema <br> Nusantara</p>
+        </div>
+
+        <label for="judul">Judul Cerita Rakyat</label>
+        <input type="text" id="judul" placeholder="Isi judul cerita rakyat...">
+
+        <label for="deskripsi">Isi Cerita Rakyat</label>
+        <textarea id="deskripsi" name="deskripsi_cerita" placeholder="Deskripsikan cerita rakyatnya..."></textarea>
+
+        <button class="kirim">Kirim Saran</button>
+    </div>
+
+    <section class="alasan_saran">
+        <h2>Kenapa saranmu sangat penting?</h2>
+        <ul>
+            <li>Membantu memperkaya koleksi cerita rakyat</li>
+            <li>Melestarikan cerita rakyat</li>
+            <li>Menjangkau pembaca yang lebih luas</li>
+        </ul>
+    </section>
+
+    <footer>
+        <div class="footer_top">
+            <div id="tentang-web">
+                <div class="logo">
+                    <img src="logoweb.svg" alt="Logo Gema Nusantara">
+                    <p>Gema <br> Nusantara</p>
+                </div>
+                <p>Temukan kembali pesona dongeng masa kecil Anda di Gema Nusantara, rumah digital bagi cerita rakyat
+                    yang telah diwariskan turun-temurun, dikemas dalam format yang mudah dinikmati kapan saja. Mari
+                    bersama-sama melestarikan budaya Indonesia dan berbagi kearifan leluhur kepada generasi mendatang
+                </p>
+            </div>
+            <div id="navigasi">
+                <h3>Navigasi</h3>
+                <ul>
+                    <li><a href="beranda.html">Beranda</a></li>
+                    <li><a href="jelajahi.html">Jelajahi</a></li>
+                    <li><a href="saran.html">Saran</a></li>
+                    <li><a href="riwayat.html">Riwayat</a></li>
+                </ul>
+            </div>
+            <div id="kontak">
+                <h3>Kontak Kami</h3>
+                <ul>
+                    <li><a href="https://www.instagram.com/">Instagram</a></li>
+                    <li><a href="https://www.youtube.com/">Youtube</a></li>
+                    <li><a href="https://www.tiktok.com/">Tiktok</a></li>
+                    <li><a href="https://www.twitter.com/">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer_bottom">
+            <hr>
+            <p>Copyright @Gema Nusantara 2025</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard_admin_saran.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz@0,14..32;1,14..32&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,500&display=swap');
+        body {
+            margin: 0;
+            font-family: "Poppins";
+            background-color: #F6F7F8;
+            color: #000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            height: 100vmax;
+            background-color: #Fff;
+            display: flex;
+            flex-direction: column;
+            max-width: fit-content;
+            align-items: center;
+            padding: 0px 5px;
+            box-shadow: 0 0 10px #8d8a8a;
+        }
+
+        .nav_logo {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            width: 48px;
+            height: 42px;
+        }
+
+        .icon {
+            margin: 15px 6px;
+            width: 25px;
+            height: 25px;
+        }
+
+        #active {
+            background-color: #6D4A37;
+            padding: 5px 5px;
+            border-radius: 10px;
+            width: 25px;
+            height: 25px;
+        }
+
+        #header_dashboard {
+            margin: auto 50px 0px 100px;
+            display: flex;
+            justify-content: start;
+            font-family: 'poppins', sans-serif;
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+        .dashboard {
+            margin: 20px 50px 50px 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            background-color: #Fff;
+            padding: 20px 30px;
+            border-radius: 8px;
+        }
+
+        .dashboard h2 {
+            margin: 0;
+        }
+
+        .saran_container {
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+            border-radius: 8px;
+            gap: 20px;
+        }
+
+        .saran {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 10px 20px;
+            border: 2px solid #cccaca;
+            border-radius: 8px;
+            gap: 8px;
+        }
+
+        .saran_left {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .saran_top {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .saran_top h3 {
+            margin: 5px 0px;
+        }
+
+        .saran p {
+            margin: 10px 0px;
+        }
+
+        .isi_saran {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+
+        .pagination {
+            display: flex;
+            justify-content: start;
+        }
+
+        .pagination a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        }
+
+        .pagination a.active {
+        background-color: #000000;
+        color: white;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+        }
+    </style>
+    <link rel="icon" href="cr_wrapper/logo_web.png">
+    <title>Gema Nusantara</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+</head>
+
+<body>
+    <nav>
+        <a href="landingpage.html"><img class="nav_logo" src="logoweb.svg" alt="Logo Gema Nusantara"> </a>
+        <a href="dashboardhome.html"><img class="icon" src="home1.svg"></a>
+        <a href="dashboardbuku.html"><img class="icon" src="book1.svg"></a>
+        <a href="dasboardwebadmin.html"><img class="icon" src="user.svg"></a>
+        <a href="dashboardadminsaran.html"><img class="icon"  id="active" src="komen.svg"></a>
+    </nav>
+
+    <h1><span id="header_dashboard">Dashboard Admin</span></h1>
+
+    <div class="dashboard">
+        <h2>Daftar Saran Cerita Rakyat</h2>
+        <div class="saran_container">
+
+            <div class="saran">
+                <div class="saran_left">
+                    <div class="saran_top">
+                        <h3>Rengga Agitama</h3>
+                        <p>11/27/2025</p>
+                    </div>
+                    <div class="isi_saran">
+                        <p>
+                            "halooo izin beri saran, saya merekomendasikan cerita Panji Cycle tentang petualangan
+                            seorang pangeran bernama Panji mencari Dewi Candra Kirana,
+                            ceritanya penuh dengan romansa meskipun agak panjang si"
+                        </p>
+                    </div>
+                </div>
+                <div class="aksi">
+                    <img src="sampah.svg">
+                </div>
+            </div>
+
+            <div class="saran">
+                <div class="saran_left">
+                    <div class="saran_top">
+                        <h3>Muhammad</h3>
+                        <p>11/27/2025</p>
+                    </div>
+                    <div class="isi_saran">
+                        <p>
+                            "Aku ada cerita rakyat dari daerahku, yaitu “Si Pitung, Pahlawan Betawi” Cerita ini
+                            mengisahkan
+                            tentang pahlawan lokal yang berani melawan ketidakadilan dan penjajahan demi melindungi
+                            rakyat
+                            kecil.."
+                        </p>
+                    </div>
+                </div>
+                <div class="aksi">
+                    <img src="sampah.svg">
+                </div>
+            </div>
+
+            <div class="saran">
+                <div class="saran_left">
+                    <div class="saran_top">
+                        <h3>Haru</h3>
+                        <p>11/27/2025</p>
+                    </div>
+                    <div class="isi_saran">
+                        <p>
+                            "Banyakin cerita rakyat asal usul suku pulau dong, kayak cerita 'Danau Toba' yang ada
+                            legenda
+                            Toba juga menjadi pulau volkanik bahkan sampai masuk ke daftar UNESCO."
+                        </p>
+                    </div>
+                </div>
+                <div class="aksi">
+                    <img src="sampah.svg">
+                </div>
+            </div>
+
+            <div class="saran">
+                <div class="saran_left">
+                    <div class="saran_top">
+                        <h3>Putri</h3>
+                        <p>11/27/2025</p>
+                    </div>
+                    <div class="isi_saran">
+                        <p>
+                            "Aku ada saran nih Kisah yang mirip Cinderella tapi versi Nusantara. Intinya, cerita ini
+                            mengisahkan tentang dua saudara tiri yang memperlihatkan perbedaan sikap antara kebaikan dan
+                            kejahatan. Bawang Putih yang baik hati, sabar, dan jujur sedangkan Bawang"
+                        </p>
+                    </div>
+                </div>
+                <div class="aksi">
+                    <img src="sampah.svg">
+                </div>
+            </div>
+        </div>
+
+        
+    <div class="pagination">
+        <a href="#">&laquo;</a>
+        <a class="active" href="#jelajahi.html">1</a>
+        <a href="#">1</a>
+        <a href="#">2</a>
+        <a href="#">...</a>
+        <a href="#">54</a>
+        <a href="#">55</a>
+        <a href="#">&raquo;</a>
+    </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+body {
+    margin: 0;
+    font-family: "Poppins";
+    background-color: #FFFBE9;
+    color: #000;
+}
+
+.sidebar {
+    width: 200px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+}
+
+.logo {
+    width: 70px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logo img {
+    margin-left: 0;
+    width: 60px;
+}
+
+.logo p {
+    font-size: 16px;
+    line-height: 1em;
+    font-weight: 600;
+    color: #6D4A37;
+    margin: 0;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px 0;
+    text-decoration: none;
+    color: #000;
+    transition: color 0.3s ease;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'poppins';
+}
+
+.sidebar img {
+    width: 130px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.sidebar .edit-icon {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    margin-left: 25px;
+    margin-bottom: 310px;
+    background-color: #fff;
+    border-radius: 50%;
+    padding: 5px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transform: translateX(-50%);
+}
+
+.sidebar a {
+    margin-left: 15px;
+    justify-content: center;
+}
+
+.logout-button {
+    margin-top: 40px;
+    margin-left: 20px;
+    font-weight: 200;
+}
+
+.rangkum_baca {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.isi_rangkum,
+.grafik_baca,
+.lanjut_baca {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 0px 10px 10px 10px;
+    background-color: #fff;
+    border: 2px solid#cccaca;
+    border-radius: 8px;
+}
+
+.isi_rangkum h2 {
+    font-size: 15px;
+}
+
+.rangkum_detail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.rangkum_detail img {
+    width: 50px;
+    height: 50px;
+}
+
+.rangkum_detail h3 {
+    font-size: 45px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.grafik_baca {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.grafik_baca img {
+    height: 100%;
+    max-width: 330px;
+}
+
+.lanjut_baca img {
+    width: 120px;
+    height: 100%;
+}
+
+.isi_baca {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.isi_baca h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.baca_detail {
+    display: flex;
+    flex-direction: column;
+}
+
+.isi_detail {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    margin: 0;
+    gap: 5px;
+}
+
+.isi_detail p {
+    font-size: 10px;
+    margin: 5px 0 5px 0;
+}
+
+.isi_detail img {
+    width: 15px;
+    height: 15px;
+}
+
+#star {
+    color: rgb(255, 225, 0);
+    font-size: 15px;
+    margin: 0;
+}
