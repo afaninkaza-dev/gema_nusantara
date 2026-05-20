@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +10,16 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz@0,14..32;1,14..32&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,700;1,14..32,500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
-            padding-top: 60px;
+            padding-top: 70px;
             font-family: "Poppins";
             background-color: #FEFDF7;
             color: #000;
@@ -19,7 +27,7 @@
 
         nav {
             background-color: #FEFDF7;
-            font-family: 'inter';
+            font-family: "Inter";
             padding: 0.5em 1em;
             display: flex;
             align-items: center;
@@ -49,12 +57,10 @@
             margin: 0;
         }
 
-        .logo img {
-            width: 100%;
-        }
-
-        nav .profile:hover {
-            transform: scale(1.1);
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
         }
 
         nav a {
@@ -62,7 +68,7 @@
             font-weight: 500;
             color: #918d8a;
             font-size: 16px;
-            margin-right: 2em;
+            margin-right: 15px;
             transition: all 0.3s ease;
         }
 
@@ -78,25 +84,51 @@
             cursor: pointer;
         }
 
+        nav .profile:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            color: #000;
+        }
+
         .section-top {
-        .saran_header {
-            display: flex;
-            justify-content: start;
-            background: #FFF5E7;
-            border-bottom-left-radius: 50px;
-            border-bottom-right-radius: 50px;
-            padding: 40px 100px;
-            position: relative;
-            top:0;
-        }}
+            .saran_header {
+                display: flex;
+                justify-content: start;
+                background: #FFF5E7;
+                border-bottom-left-radius: 50px;
+                border-bottom-right-radius: 50px;
+                padding: 40px 100px;
+                position: relative;
+                top: 0;
+            }
+        }
 
         .section-top h1 {
-        .saran_header h1 {
-            font-size: 30px;
-            font-weight: 500;
-            margin: 0;
-            color: #000;
-        }}
+            .saran_header h1 {
+                font-size: 30px;
+                font-weight: 500;
+                margin: 0;
+                color: #000;
+            }
+        }
+
+        .main-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            gap: 40px;
+        }
+
+        .content-left {
+            flex: 1;
+        }
 
         .saran_container {
             display: flex;
@@ -150,59 +182,65 @@
         }
 
         .btn-submit {
-        .kirim {
-            width: 100%;
-            padding: 0.85em;
-            background-color: #6D4A37;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-family: "Poppins";
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1.5em;
-        }}
+            .kirim {
+                width: 100%;
+                padding: 0.85em;
+                background-color: #6D4A37;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                font-family: "Poppins";
+                font-size: 15px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                margin-top: 1.5em;
+            }
+        }
 
         .btn-submit:hover {
-        .kirim:hover {
-            background-color: #5a3a2a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(109, 74, 55, 0.3);
-        }}
+            .kirim:hover {
+                background-color: #5a3a2a;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(109, 74, 55, 0.3);
+            }
+        }
 
         .section-bottom {
-        .alasan_saran {
-            background-color: #FEFDF7;
-            padding: 40px 90px;
-            max-width: 1400px;
-            min-height: 400px;
-            margin: 0 auto;
+            .alasan_saran {
+                background-color: #FEFDF7;
+                padding: 40px 90px;
+                max-width: 1400px;
+                min-height: 400px;
+                margin: 0 auto;
 
-        }}
+            }
+        }
 
         .section-bottom h2 {
-        .alasan_saran h2 {
-            font-size: 25px;
-            font-weight: 400;
-            margin-bottom: 1em;
-            color: #000;
-        }}
+            .alasan_saran h2 {
+                font-size: 25px;
+                font-weight: 400;
+                margin-bottom: 1em;
+                color: #000;
+            }
+        }
 
         .section-bottom ul {
-        .alasan_saran ul {
-            list-style-type: disc;
-            padding-left: 1.5em;
-            line-height: 1.5;
-            color: #333;
-            font-size: 13px;
-        }}
+            .alasan_saran ul {
+                list-style-type: disc;
+                padding-left: 1.5em;
+                line-height: 1.5;
+                color: #333;
+                font-size: 13px;
+            }
+        }
 
         .section-bottom li {
-        .alasan_saran li {
-            margin-bottom: 0.7em;
-        }}
+            .alasan_saran li {
+                margin-bottom: 0.7em;
+            }
+        }
 
         footer {
             background-color: #FFF5E7;
@@ -247,26 +285,29 @@
         /* Responsive */
         @media (max-width: 968px) {
             .section-top {
-            .saran_header {
-                grid-template-columns: 1fr;
-                gap: 2.5em;
-                padding: 2.5em 1.5em 5em 1.5em;
-            }}
+                .saran_header {
+                    grid-template-columns: 1fr;
+                    gap: 2.5em;
+                    padding: 2.5em 1.5em 5em 1.5em;
+                }
+            }
 
             .section-top h1 {
-            .saran_header h1 {
-                font-size: 2em;
-                text-align: center;
-            }}
+                .saran_header h1 {
+                    font-size: 2em;
+                    text-align: center;
+                }
+            }
 
             .saran_container {
                 padding: 2em 2.5em;
             }
 
             .section-bottom {
-            .alasan_saran {
-                padding: 3em 1.5em 4em 1.5em;
-            }}
+                .alasan_saran {
+                    padding: 3em 1.5em 4em 1.5em;
+                }
+            }
         }
     </style>
     <link rel="icon" href="logoweb.svg">
@@ -284,34 +325,46 @@
         <a class="active" href="saran.html">Saran</a>
         <img class="profile" src="profile22.svg" alt="User Icon">
     </nav>
+    <div class="main-wrapper">
+        <div class="content-left">
+            <section class="saran_header">
+                <h1>Usul Buku Dengan Hati,<br>Budaya Baca Lestari</h1>
+            </section>
 
-    <section class="saran_header">
-        <h1>Usul Buku Dengan Hati,<br>Budaya Baca Lestari</h1>
-    </section>
-
-    <div class="saran_container">
-        <div class="logo">
-            <img src="logoweb.svg" alt="Logo Gema Nusantara">
-            <p>Gema <br> Nusantara</p>
+            <section class="alasan_saran">
+                <h2>Kenapa saranmu sangat penting?</h2>
+                <ul>
+                    <li>Membantu memperkaya koleksi cerita rakyat</li>
+                    <li>Melestarikan cerita rakyat</li>
+                    <li>Menjangkau pembaca yang lebih luas</li>
+                </ul>
+            </section>
         </div>
 
-        <label for="judul">Judul Cerita Rakyat</label>
-        <input type="text" id="judul" placeholder="Isi judul cerita rakyat...">
+        <div class="saran_container">
+            <div class="logo">
+                <img src="logoweb.svg" alt="Logo Gema Nusantara">
+                <p>Gema <br> Nusantara</p>
+            </div>
 
-        <label for="deskripsi">Isi Cerita Rakyat</label>
-        <textarea id="deskripsi" name="deskripsi_cerita" placeholder="Deskripsikan cerita rakyatnya..."></textarea>
+            <label for="judul">Judul Cerita Rakyat</label>
+            <input type="text" id="judul" placeholder="Isi judul cerita rakyat...">
 
-        <button class="kirim">Kirim Saran</button>
+            <label for="deskripsi">Isi Cerita Rakyat</label>
+            <textarea id="deskripsi" name="deskripsi_cerita" placeholder="Deskripsikan cerita rakyatnya..."></textarea>
+
+            <button class="kirim">Kirim Saran</button>
+        </div>
+
+        <section class="alasan_saran">
+            <h2>Kenapa saranmu sangat penting?</h2>
+            <ul>
+                <li>Membantu memperkaya koleksi cerita rakyat</li>
+                <li>Melestarikan cerita rakyat</li>
+                <li>Menjangkau pembaca yang lebih luas</li>
+            </ul>
+        </section>
     </div>
-
-    <section class="alasan_saran">
-        <h2>Kenapa saranmu sangat penting?</h2>
-        <ul>
-            <li>Membantu memperkaya koleksi cerita rakyat</li>
-            <li>Melestarikan cerita rakyat</li>
-            <li>Menjangkau pembaca yang lebih luas</li>
-        </ul>
-    </section>
 
     <footer>
         <div class="footer_top">
@@ -350,4 +403,5 @@
         </div>
     </footer>
 </body>
+
 </html>

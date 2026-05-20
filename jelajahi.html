@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="jelajahi_style.css">
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
         * {
             margin: 0;
             padding: 0;
@@ -16,7 +17,7 @@
 
         body {
             margin: 0;
-            padding-top: 70px;
+            padding-top: 35px;
             font-family: "Poppins";
             background-color: #FEFDF7;
             color: #000;
@@ -49,13 +50,9 @@
         .logo p {
             font-size: 12px;
             line-height: 1em;
-            font-weight: 500;
+            font-weight: 600;
             color: #6D4A37;
             margin: 0;
-        }
-
-        nav .profile:hover {
-            transform: scale(1.1);
         }
 
         nav a {
@@ -63,7 +60,7 @@
             font-weight: 500;
             color: #918d8a;
             font-size: 16px;
-            margin-right: 2em;
+            margin-right: 15px;
             transition: all 0.3s ease;
         }
 
@@ -77,6 +74,16 @@
             width: 30px;
             height: 30px;
             cursor: pointer;
+        }
+
+        nav .profile:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            color: #000;
         }
 
         .hero {
@@ -132,14 +139,14 @@
             background-color: #000;
             color: #fff;
             border: none;
-            width: 30px; 
-            height: 30px; 
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0; 
+            padding: 0;
         }
 
         .section {
@@ -172,6 +179,7 @@
                 gap: 80px;
                 padding: 0 40px 150px;
             }
+
             nav {
                 background-color: #FEFDF7;
                 font-family: "Inter";
@@ -201,7 +209,7 @@
                 line-height: 1em;
                 font-weight: 600;
                 color: #6D4A37;
-                
+
             }
 
             nav .profile:hover {
@@ -213,7 +221,7 @@
                 font-weight: 500;
                 color: #918d8a;
                 font-size: 14px;
-                margin-right: 2em;
+                margin-right: 15px;
                 transition: all 0.3s ease;
             }
 
@@ -236,11 +244,12 @@
                 gap: 70px;
                 padding: 0 20px 100px;
             }
-            
+
             h1 {
                 font-size: 28px;
                 margin: 30px auto;
             }
+
             nav {
                 background-color: #FEFDF7;
                 font-family: "Inter";
@@ -298,6 +307,7 @@
                 cursor: pointer;
             }
         }
+
         .cerita-wrapper {
             width: 200px;
             padding: 15px;
@@ -376,8 +386,10 @@
             gap: 150px;
         }
 
-        #tentang-web, #navigasi, #kontak{
-            max-width: 25em; 
+        #tentang-web,
+        #navigasi,
+        #kontak {
+            max-width: 25em;
         }
 
         footer ul {
@@ -392,45 +404,44 @@
 
         }
     </style>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="YOUR_INTEGRITY_HASH" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Gema Nusantara</title>
 </head>
 
 <body>
     <header>
-    <nav>
-    <div class="logo">
-        <img src="logoweb.svg" alt="logo web">
-        <p>Gema <br>Nusantara</p>
-    </div>
+        <nav>
+            <div class="logo">
+                <img src="logoweb.svg" alt="logo web">
+                <p>Gema <br>Nusantara</p>
+            </div>
 
-    <div class="menu-icon" id="menu-icon">
-        <i class="ph ph-list"></i>
-    </div>
+            <div class="menu-icon" id="menu-icon">
+                <i class="ph ph-list"></i>
+            </div>
 
-    <div class="nav-menu" id="nav-menu">
-        <a class="active" href="landingpage.html">Beranda</a>
-        <a href="jelajahi.html">Jelajahi</a>
-        <a href="saran.html">Saran</a>
-        <a href="settingakun_baru.html"><img class="profile" src="profile22.svg" alt="user profile"></a>
-    </div>
-    </nav>
-    <script>
-    const menuIcon = document.getElementById("menu-icon");
-    const navMenu = document.getElementById("nav-menu");
+            <div class="nav-menu" id="nav-menu">
+                <a href="landingpage.html">Beranda</a>
+                <a class="active" href="jelajahi.html">Jelajahi</a>
+                <a href="saran.html">Saran</a>
+                <a href="settingakun_baru.html"><img class="profile" src="profile22.svg" alt="user profile"></a>
+            </div>
+        </nav>
+        <script>
+            const menuIcon = document.getElementById("menu-icon");
+            const navMenu = document.getElementById("nav-menu");
 
-    menuIcon.addEventListener("click", () => {
-        navMenu.classList.toggle("active");
-    });
-    </script>
+            menuIcon.addEventListener("click", () => {
+                navMenu.classList.toggle("active");
+            });
+        </script>
     </header>
     <section class="hero" id="home">
         <h2>Menyelami Kisah Tradisi dalam Genggaman Tangan</h2>
         <div class="search-bar">
-                <input type="text" placeholder="Telusuri judul buku">
-                <button><i class="fas fa-search"></i></button>
+            <input type="text" placeholder="Telusuri judul buku">
+            <button><i class="fas fa-search"></i></button>
         </div>
     </section>
     <div class="cerita-container">
@@ -464,7 +475,7 @@
             <h2>Biwar & Naga</h2>
             <hr>
             <div class="rating">
-            <span class="star">⭐</span>
+                <span class="star">⭐</span>
                 <span class="rating-number">4.4</span>
                 <img class="icon-small" src="suka.svg" title="suka">
                 <img class="icon-small" src="simpan.svg" title="simpan">
@@ -547,7 +558,7 @@
             <h2>Batu Golog</h2>
             <hr>
             <div class="rating">
-               <span class="star">⭐</span>
+                <span class="star">⭐</span>
                 <span class="rating-number">4.4</span>
                 <img class="icon-small" src="suka.svg" title="suka">
                 <img class="icon-small" src="simpan.svg" title="simpan">
@@ -657,4 +668,5 @@
         </div>
     </footer>
 </body>
+
 </html>
