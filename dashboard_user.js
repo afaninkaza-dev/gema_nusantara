@@ -1,75 +1,38 @@
 document.addEventListener('DOMContentLoaded', function () {
-
-    // LANGKAH 1: DAFTARKAN PLUGIN
-    // Baris ini HARUS ada di sini di awal kode JavaScript Anda.
-    // Jika Anda TIDAK meletakkan baris ini, angka tidak akan muncul.
     Chart.register(ChartDataLabels);
 
-    // 1. Dapatkan konteks (context) canvas
     const ctx = document.getElementById('grafikMembaca').getContext('2d');
 
-    // 2. Data Rating Cerita Rakyat
-    const labels = [
-        'Senin',
-        'Selasa',
-        'Rabu',
-        'Kamis',
-        'Jumat',
-        'Sabtu',
-        'Minggu'
-    ];
-    const dataRatings = [3, 8, 6, 3, 3, 6, 5];
-
-    // 3. Konfigurasi Diagram
-    const ratingChart = new Chart(ctx, {
+    new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: labels,
+            labels: ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu'],
             datasets: [{
-                label: 'Jumlah Cerita Yang Dibaca',
-                data: dataRatings,
-                backgroundColor: 'rgba(109, 74, 54, 0.9)',
-                borderColor: 'rgba(109, 74, 54, 0.9)',
-                borderWidth: 1
+                label: '2020',
+                data: [3, 8, 6, 3, 3, 6, 5],
+                backgroundColor: 'rgba(109, 74, 54, 0.85)',
+                borderColor: 'rgba(109, 74, 54, 0.85)',
+                borderWidth: 1,
+                borderRadius: 3
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             plugins: {
                 title: {
                     display: true,
                     text: 'Jumlah Membaca Perhari',
-                    font: { size: 18, weight: 'bold' }
+                    font: { size: 14, weight: '600', family: 'Poppins' },
+                    color: '#222',
+                    padding: { bottom: 12 }
                 },
-                legend: {
-                    display: true,
-                    position: 'bottom'
-                },
-                // KONFIGURASI DATALABELS DI SINI
-                datalabels: {
-                    anchor: 'center',
-                    display: 'false',
-                    align: 'center',
-                    color: 'white',
-                    font: {
-                        weight: 'bold'
-                    },
-                    formatter: function (value) {
-                        return value.toFixed(2);
-                    }
-                },
-                // Tooltip agar tetap tampil dua desimal
+                legend: { display: true, position: 'bottom' },
+                datalabels: { display: false },
                 tooltip: {
                     callbacks: {
                         label: function (context) {
-                            let label = context.dataset.label || '';
-                            if (label) {
-                                label += ': ';
-                            }
-                            if (context.parsed.y !== null) {
-                                label += new Intl.NumberFormat('id-ID', { minimumFractionDigits: 2 }).format(context.parsed.y);
-                            }
-                            return label;
+                            return (context.dataset.label || '') + ': ' + context.parsed.y;
                         }
                     }
                 }
@@ -78,15 +41,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 y: {
                     min: 0,
                     max: 8,
-                    ticks: {
-                        stepSize: 4,
-                        callback: function (value) { return value.toFixed(1); }
-                    },
-                    title: { display: false }
+                    ticks: { stepSize: 4 },
+                    grid: { color: 'rgba(0,0,0,0.06)' }
                 },
-                x: {
-                    grid: { display: false }
-                }
+                x: { grid: { display: false } }
             }
         }
     });

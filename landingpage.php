@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landing Page</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
@@ -28,7 +28,7 @@
         nav {
             background-color: #FEFDF7;
             font-family: "Inter", sans-serif;
-            padding: 0.8em 4%;
+            padding: 15px 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -56,7 +56,7 @@
 
         .logo p {
             font-size: 13px;
-            line-height: 1.2em;
+            line-height: 19px;
             font-weight: 700;
             color: #6D4A37;
             margin: 0;
@@ -65,9 +65,9 @@
         .nav-menu {
             display: flex;
             align-items: center;
-            gap: 40px;
+            gap: 30px;
             margin-left: auto;
-            margin-right: 0;
+            margin-right: 30px;
         }
 
         nav a {
@@ -112,7 +112,7 @@
         .cerita_row img {
             width: 170px;
             height: 250px;
-            border-radius: 10px;
+            border-radius: 5px;
             object-fit: cover;
         }
 
@@ -139,7 +139,7 @@
         }
 
         .hero {
-            height: 50%;
+            min-height: 50vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -147,13 +147,13 @@
             font-family: 'Poppins';
             color: #000;
             text-align: center;
-            padding: 0 20px;
+            padding: 60px 20px 20px 20px;
         }
 
         .hero h2 {
             font-size: 40px;
             font-weight: 300;
-            margin-top: 80px;
+            margin-top: 30px;
             margin-bottom: 20px;
             font-family: 'poppins';
             text-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
@@ -261,30 +261,15 @@
             padding: 0 20px 60px;
         }
 
-        /* Default desktop */
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        /* Menu icon (hidden di desktop) */
-        .menu-icon {
-            display: none;
-            font-size: 30px;
-            cursor: pointer;
-        }
-
-        /* --- MOBILE NAVBAR --- */
         @media (max-width: 900px) {
 
             .menu-icon {
                 display: block;
             }
 
-            .nav-links {
+            .nav-menu {
                 position: absolute;
-                top: 60px;
+                top: 100px;
                 right: 0;
                 background: #FEFDF7;
                 flex-direction: column;
@@ -292,6 +277,8 @@
                 padding: 15px 0;
                 gap: 20px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                border-radius: 8px;
+                margin: 0;
                 display: none;
             }
 
@@ -302,16 +289,21 @@
             .nav-menu img.profile {
                 margin-top: 10px;
             }
-        }
 
+            .cerita-container {
+                grid-template-columns: repeat(2, 200px);
+                gap: 80px;
+                padding: 0 40px 150px;
+            }
+        }
 
         .judul-rating {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 90%;
-            max-width: 1200px;
-            margin: 0 auto 20px;
+            max-width: 890px;
+            margin: 0 auto 10px;
         }
 
         .judul-rating h3 {
@@ -331,19 +323,21 @@
         .kotak-buku {
             width: 200px;
             padding: 15px;
-            border-radius: 14px;
+            border-radius: 0;
             background-color: #6D4A36;
             color: #F7F4E9;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            flex-shrink: 0;
         }
 
         .kotak-buku h2 {
-            font-size: 15px;
-            font-weight: 600;
             margin: 0;
+            font-weight: 600;
+            font-size: 15px;
+            height: 60px;
+            display: flex;
+            align-items: center;
         }
 
         .kotak-buku hr {
@@ -355,8 +349,8 @@
         .sampul {
             align-items: center;
             width: 100%;
-            height: 270px;
-            border-radius: 6px;
+            height: 250px;
+            border-radius: 0;
             object-fit: cover;
         }
 
@@ -375,13 +369,6 @@
             font-size: 16px;
             font-weight: 500;
             margin-right: auto;
-        }
-
-        .icon {
-            width: 10px;
-            height: 10px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
         }
 
         #jelajahi {
@@ -403,8 +390,28 @@
         #baru_ditambahkan {
             font-family: 'Poppins';
             padding: 40px 150px;
-            background-color: white;
+            background-color: transparent;
             justify-content: center;
+        }
+
+        #baru_ditambahkan .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #baru_ditambahkan .header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        #baru_ditambahkan .header a {
+            font-size: 16px;
+            color: #4b4b4b;
+            text-decoration: none;
         }
 
         .cerita_container {
@@ -433,8 +440,8 @@
         }
 
         .cerita_wrapper .sampul {
-            width: 200px;
-            height: 300px;
+            width: 180px;
+            height: 280px;
             border-radius: 10px;
             position: relative;
             z-index: 2;
@@ -458,16 +465,16 @@
             align-items: center;
             padding-bottom: 10px;
             border-bottom: 1.4px solid white;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .detail_top h2 {
             font-size: 18px;
-            margin: 0;
+            font-weight: 600;
         }
 
         .cerita_detail p {
-            margin: 0;
+            margin-bottom: 15px;
             font-size: 11px;
             line-height: 1.5;
         }
@@ -512,31 +519,25 @@
             gap: 30px;
             position: relative;
             padding: 20px 0;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .saran_wrapper {
+        /* Modifikasi untuk sistem slider ulasan aktif */
+        .saran_item {
+            display: none;
             width: 550px;
             height: 250px;
             padding: 25px 30px;
             border-radius: 15px;
             background-color: white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            opacity: 1;
             transition: all 0.3s ease;
             flex-shrink: 0;
         }
 
-        .saran_wrapper_kiri,
-        .saran_wrapper_kanan {
-            width: 550px;
-            height: 200px;
-            padding: 25px 30px;
-            border-radius: 15px;
-            background-color: white;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-            opacity: 0.3;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
+        .saran_item.active {
+            display: block;
         }
 
         .saran_top {
@@ -568,26 +569,6 @@
             color: #333;
         }
 
-        .icon-small {
-            font-size: 14px;
-            color: #F7F4E9;
-            cursor: pointer;
-            transition: transform 0.2s ease, color 0.2s ease;
-        }
-
-        .icon-small:hover {
-            transform: scale(1.2);
-            color: #FFD700;
-        }
-
-        .icon-small.bookmarked {
-            color: #fff;
-        }
-
-        .icon-small.liked {
-            color: #fff;
-        }
-
         .panah_kiri,
         .panah_kanan {
             font-size: 40px;
@@ -595,36 +576,79 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            user-select: none;
+            color: black;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: 0.3s;
         }
 
+
         footer {
-            background: #FFF5E7;
-            color: black;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            text-align: justify;
-            font-family: "Inter";
+            background-color: #FFF5E7;
+            font-family: "Inter", sans-serif;
             font-size: 14px;
+            margin-top: 80px;
         }
 
         .footer_top {
-            padding: 3em 5em;
+            padding: 4em 4%;
             display: flex;
-            flex-flow: row wrap;
-            gap: 150px;
+            gap: 50px;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        #tentang-web,
+        #tentang-web {
+            max-width: 450px;
+        }
+
+        #tentang-web p {
+            margin-top: 15px;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
         #navigasi,
         #kontak {
-            max-width: 25em;
+            min-width: 150px;
+        }
+
+        footer h3 {
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #6D4A37;
         }
 
         footer ul {
             list-style-type: none;
-            padding-inline-start: 0;
-            line-height: 2em;
+            padding: 0;
+            line-height: 2.2em;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #000;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: #6D4A37;
+        }
+
+        .footer_bottom {
+            padding: 1.5em 4%;
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer_bottom hr {
+            border: none;
+            border-top: 1px solid #dcd3c7;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -639,10 +663,12 @@
         <div class="menu-icon" id="menu-icon">
             <i class="ph ph-list"></i>
         </div>
+
         <div class="nav-menu" id="nav-menu">
-            <a class="active" href="landingpage1.html">Beranda</a>
-            <a href="jelajahi_belumlogin.html">Jelajahi</a>
-            <a href="masuk.php"><img class="profile" src="img/profile.svg" alt="user profile"></a>
+            <a class="active" href="landingpage.php">Beranda</a>
+            <a href="jelajahi.php">Jelajahi</a>
+            <a href="saran.php">Saran</a>
+            <a href="settingakun_baru.php"><img class="profile" src="img/profile22.svg" alt="user profile"></a>
         </div>
     </nav>
     <script>
@@ -655,7 +681,7 @@
     </script>
     <section class="hero" id="home">
         <h2>Seribu Cerita Dalam Genggamanmu</h2>
-        <a id="jelajahi" href="jelajahi_belumlogin.html" style="color: white;">Jelajahi</a>
+        <a id="jelajahi" href="jelajahi.php" style="color: white;">Jelajahi</a>
     </section>
     <section class="section">
         <div class="cerita_row">
@@ -680,8 +706,7 @@
     <section class="section">
         <div class="judul-rating">
             <h3>Rating Tertinggi</h3>
-            <a href="#">Lihat Semua ></a>
-        </div>
+            <a href="jelajahi.php">Lihat Semua ></a>
         </div>
         <div class="buku-card">
             <div class="kotak-buku">
@@ -691,8 +716,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.8</span>
-                    <i class="fas fa-heart icon-small"></i>
-                    <i class="fas fa-bookmark icon-small"></i>
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
             <div class="kotak-buku">
@@ -702,8 +727,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.7</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
             <div class="kotak-buku">
@@ -713,8 +738,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.6</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
             <div class="kotak-buku">
@@ -724,8 +749,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.5</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
         </div>
@@ -733,7 +758,7 @@
     <section class="section">
         <div class="judul-rating">
             <h3>Populer Bulan Ini</h3>
-            <a href="#">Lihat Semua ></a>
+            <a href="jelajahi.php">Lihat Semua ></a>
         </div>
         <div class="buku-card">
             <div class="kotak-buku">
@@ -743,8 +768,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.4</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
             <div class="kotak-buku">
@@ -754,8 +779,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.5</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
             <div class="kotak-buku">
@@ -765,8 +790,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.5</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
             <div class="kotak-buku">
@@ -776,8 +801,8 @@
                 <div class="rating">
                     <span class="star">⭐</span>
                     <span class="rating-number">4.4</span>
-                    <img class="icon" src="icon.png" title="suka">
-                    <img class="icon" src="like.png" title="simpan">
+                    <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                    <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                 </div>
             </div>
         </div>
@@ -785,20 +810,17 @@
     <section id="baru_ditambahkan">
         <div class="header">
             <h2>Baru Ditambahkan</h2>
-            <a href="jelajahi_belumlogin.html">Lihat Semua</a>
+            <a href="jelajahi.php">Lihat Semua ></a>
         </div>
         <div class="cerita_container">
-
             <div class="cerita_wrapper">
                 <div class="coklat"></div>
                 <img src="img/ceritarawa.svg" alt="Rawa Pening" class="sampul">
                 <div class="cerita_detail">
                     <div class="detail_top">
                         <h2>Rawa Pening</h2>
-                        <div class="icons">
-                            <img class="icon" src="like.png" title="suka">
-                            <img class="icon" src="icon.png" title="simpan">
-                        </div>
+                        <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                        <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                     </div>
                     <p>
                         Cerita mengisahkan tentang Baro Klinting, seekor naga, anak dari Endang Sawitri, putri Kepala
@@ -814,10 +836,8 @@
                 <div class="cerita_detail">
                     <div class="detail_top">
                         <h2>Danau Lipan</h2>
-                        <div class="icons">
-                            <img class="icon" src="like.png" title="suka">
-                            <img class="icon" src="icon.png" title="Ssimpan">
-                        </div>
+                        <span class="material-icons" onclick="location.href='dashboardsuka_user.php'; return false;">favorite_border</span>
+                        <span class="material-icons" onclick="location.href='dashboardsimpan.php'; return false;">bookmark_border</span>
                     </div>
                     <p>
                         Saat Ratu Aji Bidara Putih dilamar oleh Raja Tiongkok, dia segera mengutus menterinya untuk
@@ -827,13 +847,20 @@
                     </p>
                 </div>
             </div>
+        </div>
     </section>
     <section id="ulasan">
         <h2>Belum Menemukan Cerita Rakyat Favoritmu?</h2>
-        <a id="saran" href="masuk.php">Beri Saran</a>
+        <a id="saran" href="saran.php">Beri Saran</a>
 
         <div class="saran_container">
-            <div class="saran_wrapper_kiri">
+            <!-- PANAH KIRI -->
+            <div class="panah_kiri" onclick="plusSaran(-1)">
+                <span>‹</span>
+            </div>
+
+            <!-- ITEM 1 -->
+            <div class="saran_item active">
                 <div class="saran_top">
                     <img class="profile" src="img/profile.svg" alt="User Icon">
                     <h3>Andi Pratama</h3>
@@ -845,11 +872,8 @@
                 </div>
             </div>
 
-            <div class="panah_kiri">
-                <span>‹</span>
-            </div>
-
-            <div class="saran_wrapper">
+            <!-- ITEM 2 -->
+            <div class="saran_item">
                 <div class="saran_top">
                     <img class="profile" src="img/profile.svg" alt="User Icon">
                     <h3>Haru</h3>
@@ -862,11 +886,8 @@
                 </div>
             </div>
 
-            <div class="panah_kanan">
-                <span>›</span>
-            </div>
-
-            <div class="saran_wrapper_kanan">
+            <!-- ITEM 3 -->
+            <div class="saran_item">
                 <div class="saran_top">
                     <img class="profile" src="img/profile.svg" alt="User Icon">
                     <h3>Wila Wulandari</h3>
@@ -876,26 +897,32 @@
                         Toba juga menjadi pulau volkanik bahkan sampai masuk ke daftar UNESCO."</p>
                 </div>
             </div>
+
+            <!-- PANAH KANAN -->
+            <div class="panah_kanan" onclick="plusSaran(1)">
+                <span>›</span>
+            </div>
         </div>
     </section>
     <footer>
         <div class="footer_top">
             <div id="tentang-web">
                 <div class="logo">
-                    <img src="img/logoweb.svg" alt="logo web" style="width: 90px; height: auto; margin-right: 20px;">
+                    <img src="img/logoweb.svg" alt="Logo Gema Nusantara">
                     <p>Gema <br> Nusantara</p>
                 </div>
                 <p>Temukan kembali pesona dongeng masa kecil Anda di Gema Nusantara, rumah digital bagi cerita rakyat
                     yang telah diwariskan turun-temurun, dikemas dalam format yang mudah dinikmati kapan saja. Mari
-                    bersama-sama melestarikan budaya Indonesia dan berbagi kearifan leluhur kepada generasi mendatang
+                    bersama-sama melestarikan budaya Indonesia dan berbagi kearifan leluhur kepada generasi mendatang.
                 </p>
             </div>
             <div id="navigasi">
                 <h3>Navigasi</h3>
                 <ul>
-                    <li><a href="landingpage1.html">Beranda</a></li>
-                    <li><a href="jelajahi_belumlogin.html">Jelajahi</a></li>
-                    <li><a href="masuk.php">Saran</a></li>
+                    <li><a href="landingpage.php">Beranda</a></li>
+                    <li><a href="jelajahi.php">Jelajahi</a></li>
+                    <li><a href="saran.php">Saran</a></li>
+                    <li><a href="riwayat.php">Riwayat</a></li>
                 </ul>
             </div>
             <div id="kontak">
@@ -908,54 +935,34 @@
                 </ul>
             </div>
         </div>
-        <p align="center">&copy; 2025 Gema Nusantara. All rights reserved</p>
+        <div class="footer_bottom">
+            <hr>
+            <p>Copyright @Gema Nusantara 2026</p>
+        </div>
     </footer>
+
+    <!-- JAVASCRIPT SLIDER BARU UNTUK SARAN/ULASAN -->
     <script>
-        let slideIndex = 1;
-        let autoSlideInterval; // Variabel untuk menyimpan interval otomatis
-        showSlides(slideIndex);
-        /* Fungsi untuk tombol Next/Prev */
-        function plusSlides(n) {
-            showSlides(slideIndex += n);
+        let saranIndex = 1;
+        showSaran(saranIndex);
+
+        function plusSaran(n) {
+            showSaran(saranIndex += n);
         }
-        /* Fungsi untuk memilih slide tertentu */
-        function currentSlide(n) {
-            showSlides(slideIndex = n);
-        }
-        /* Fungsi utama menampilkan slide */
-        function showSlides(n) {
+
+        function showSaran(n) {
             let i;
-            let slides = document.getElementsByClassName("mySlides");
-            let dots = document.getElementsByClassName("dot");
-            if (n > slides.length) { slideIndex = 1 }
-            if (n < 1) { slideIndex = slides.length }
-            for (i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
+            let items = document.getElementsByClassName("saran_item");
+            if (items.length === 0) return;
+
+            if (n > items.length) { saranIndex = 1 }
+            if (n < 1) { saranIndex = items.length }
+
+            for (i = 0; i < items.length; i++) {
+                items[i].style.display = "none";
             }
-            for (i = 0; i < dots.length; i++) {
-                dots[i].className = dots[i].className.replace(" active", "");
-            }
-            slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].className += " active";
+            items[saranIndex - 1].style.display = "block";
         }
-        /* ------------------- AUTO-SLIDE ------------------- */
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-                plusSlides(1); // Pindah ke slide berikutnya
-            }, 4000); // Ganti slide setiap 4 detik
-        }
-        /* Fungsi untuk menghentikan auto-slide */
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
-        /* Jalankan auto-slide saat halaman pertama kali dibuka */
-        startAutoSlide();
-        /* ------------------- PAUSE ON HOVER ------------------- */
-        const slideshow = document.getElementById("slideshow");
-        /* Hentikan auto-slide saat kursor berada di area slideshow */
-        slideshow.addEventListener("mouseenter", stopAutoSlide);
-        /* Lanjutkan auto-slide saat kursor keluar dari area slideshow */
-        slideshow.addEventListener("mouseleave", startAutoSlide);
     </script>
 </body>
 

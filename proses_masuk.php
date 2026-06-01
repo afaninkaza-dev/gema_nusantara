@@ -1,33 +1,49 @@
 <?php
 session_start();
 include "koneksi.php";
+
 if (isset($_POST['login'])) {
-    $username = $_POST['username'];
+    $email    = trim($_POST['email']);
     $password = $_POST['password'];
 
+    // Validasi field kosong
+    if (empty($email) || empty($password)) {
+        echo "<script>alert('Email dan kata sandi harus diisi!'); history.back();</script>";
+        exit;
+    }
 
-    $stmt = $conn->prepare("SELECT * FROM login WHERE username=?");
-    $stmt->bind_param("s", $username);
+    // Cari user berdasarkan email
+    $stmt = $conn->prepare("SELECT * FROM user WHERE email = ?");
+    $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
-    $data = $result->fetch_assoc();
+    $data   = $result->fetch_assoc();
+
     if ($data) {
-
+        // Verifikasi password
         if (password_verify($password, $data['password'])) {
-            $_SESSION['username'] = $data['username'];
-            $_SESSION['level'] = $data['level'];
+            // Simpan session sesuai kolom di database
+            $_SESSION['id']    = $data['id'];
+            $_SESSION['nama']  = $data['nama'];
+            $_SESSION['email'] = $data['email'];
+            $_SESSION['role']  = $data['role'];
+            $_SESSION['admin_id'] = $data['id'];
 
-            if ($data['level'] == "admin") {
-                header("Location: tampil.php");
-            } else if ($data['level'] == "user") {
-                header("Location: tampil2.php");
+            // Redirect berdasarkan role
+            if ($data['role'] == "admin") {
+                header("Location: dashboardwebadmin.php");
+            } else {
+                header("Location: landingpage.php");
             }
             exit();
         } else {
-            echo "Password salah!";
+            echo "<script>alert('Kata sandi salah!'); history.back();</script>";
         }
     } else {
-        echo "Username tidak ditemukan";
+        echo "<script>alert('Email tidak ditemukan!'); history.back();</script>";
     }
+
+    $stmt->close();
+    $conn->close();
 }
 ?>

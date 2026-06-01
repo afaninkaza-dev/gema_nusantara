@@ -16,19 +16,20 @@
 
         body {
             margin: 0;
-            padding-top: 70px;
-            font-family: "Poppins";
+            padding-top: 50px;
+            font-family: "Poppins", sans-serif;
             background-color: #FEFDF7;
             color: #000;
         }
 
         nav {
             background-color: #FEFDF7;
-            font-family: "Inter";
-            padding: 0.5em 1em;
+            font-family: "Inter", sans-serif;
+            padding: 15px 10px;
             display: flex;
             align-items: center;
-            box-shadow: 0 0 10px #8d8a8a;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(141, 138, 138, 0.15);
             position: fixed;
             top: 0;
             left: 0;
@@ -39,23 +40,31 @@
         }
 
         .logo {
-            width: 30px;
             display: flex;
             align-items: center;
-            margin-right: auto;
+            gap: 10px;
             cursor: pointer;
         }
 
+        .logo img {
+            width: 40px;
+            height: auto;
+        }
+
         .logo p {
-            font-size: 12px;
-            line-height: 1em;
-            font-weight: 600;
+            font-size: 13px;
+            line-height: 19px;
+            font-weight: 700;
             color: #6D4A37;
             margin: 0;
         }
 
-        nav .profile:hover {
-            transform: scale(1.1);
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-left: auto;
+            margin-right: 30px;
         }
 
         nav a {
@@ -63,7 +72,6 @@
             font-weight: 500;
             color: #918d8a;
             font-size: 16px;
-            margin-right: 2em;
             transition: all 0.3s ease;
         }
 
@@ -73,14 +81,32 @@
             font-weight: 700;
         }
 
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         nav .profile {
-            width: 30px;
-            height: 30px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        nav .profile:hover {
+            transform: scale(1.1);
+        }
+
+        .menu-icon {
+            display: none;
+            font-size: 24px;
+            color: #000;
             cursor: pointer;
         }
 
         .hero {
-            height: 50%;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -88,13 +114,13 @@
             font-family: 'Poppins';
             color: #000;
             text-align: center;
-            padding: 0 20px;
+            padding: 0 20px 10px;
         }
 
         .hero h2 {
             font-size: 40px;
             font-weight: 300;
-            margin-top: 50px;
+            margin-top: 60px;
             margin-bottom: 20px;
             font-family: 'poppins';
             text-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
@@ -103,7 +129,7 @@
         .search-bar {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 0;
             position: relative;
             text-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
         }
@@ -295,17 +321,22 @@
 </head>
 
 <body>
-    <header>
     <nav>
         <div class="logo">
-            <a href="landingpage1.html"></a><img src="logoweb.svg" alt="logo web">
+            <img src="img/logoweb.svg" alt="logo web">
             <p>Gema <br>Nusantara</p>
         </div>
-        <a href="landingpage1.html">Beranda</a>
-        <a class="active" href="jelajahi_belumlogin.html">Jelajahi</a>
-        <a href="masuksatu.html"></a><img class="profile" src="profile22.svg" alt="user profile">
+
+        <div class="menu-icon" id="menu-icon">
+            <i class="ph ph-list"></i>
+        </div>
+
+        <div class="nav-menu" id="nav-menu">
+            <a href="landingpage1.html">Beranda</a>
+            <a class="active" href="jelajahi_belumlogin.html">Jelajahi</a>
+            <a href="settingakun_baru.html"><img class="profile" src="img/profile.svg" alt="user profile"></a>
+        </div>
     </nav>
-    </header>
     <section class="hero" id="home">
         <h2>Menyelami Kisah Tradisi dalam Genggaman Tangan</h2>
         <div class="search-bar">
@@ -316,193 +347,180 @@
     <div class="cerita-container">
 
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritakeong.png" alt="Gambar Cerita Keong Mas">
+            <img class="sampul" src="img/ceritakeong.svg" alt="Gambar Cerita Keong Mas">
             <h2>Keong Mas</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <span class="rating-number">4.6</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
-
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritabawang.png" alt="Gambar Cerita Bawang Putih & Bawang Merah">
+            <img class="sampul" src="img/ceritabawang.svg" alt="Gambar Cerita Bawang Putih & Bawang Merah">
             <h2>Bawang Putih & Bawang Merah</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <span class="rating-number">4.5</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
-
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritabiwar.png" alt="Gambar Cerita Biwar & Naga">
+            <img class="sampul" src="img/ceritabiwar.svg" alt="Gambar Cerita Biwar & Naga">
             <h2>Biwar & Naga</h2>
             <hr>
             <div class="rating">
-            <span class="star">⭐</span>
+                <span class="star">⭐</span>
                 <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
 
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritatimun.png" alt="Gambar Cerita Timun Mas">
+            <img class="sampul" src="img/ceritaabo.svg" alt="Gambar Cerita Timun Mas">
+            <h2>Abo Mamongkuroit dan Tulap Si Raksasa</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritatimun.svg" alt="Gambar Cerita Danau Lipan">
             <h2>Timun Mas</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <span class="rating-number">4.7</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritapangeran.png" alt="Gambar Cerita Pangeran Amat Mude">
-            <h2>Pangeran Amat Mude</h2>
+            <img class="sampul" src="img/ceritatodilaling.svg" alt="Gambar Cerita Danau Lipan">
+            <h2>To Dilaling</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <span class="rating-number">4.5</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
-
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritasipitung.png" alt="Gambar Cerita Si Pitung">
-            <h2>Si Pitung</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritamenangis.png" alt="Gambar Cerita Batu Menangis">
-            <h2>Batu Menangis</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritalasirimbone.avif" alt="Gambar Cerita La Sirimbone">
-            <h2>La Sirimbone</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritaabo.png" alt="Gambar Cerita Abo Mamongkuroit dan Tulap Si Raksasa">
-            <h2>Abo Mamongkuroit Dan Tulap Si Raksasa</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritagolog.png" alt="Gambar Cerita Batu Golog">
-            <h2>Batu Golog</h2>
-            <hr>
-            <div class="rating">
-               <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritadanau.png" alt="Gambar Cerita Danau Lipan">
-            <h2>Danau Lipan</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritakelingking.png" alt="Gambar Cerita Si Kelingking">
-            <h2>Si Kelingking</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritaputri.png" alt="Gambar Cerita Putri Ular">
-            <h2>Putri Ular</h2>
-            <hr>
-            <div class="rating">
-                <span class="star">⭐</span>
-                <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
-            </div>
-        </div>
-
-        <div class="cerita-wrapper">
-            <img class="sampul" src="ceritarawa.png" alt="Gambar Cerita Rawa Pening">
+            <img class="sampul" src="img/ceritarawa.svg" alt="Gambar Cerita Rawa Pening">
             <h2>Rawa Pening</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
                 <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
-
         <div class="cerita-wrapper">
-            <img class="sampul" src="cerita62.png" alt="Gambar Cerita Suwidak Loro">
+            <img class="sampul" src="img/ceritadanau.svg" alt="Gambar Cerita Danau Lipan">
+            <h2>Legenda Danau Lipan</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritalutung.svg" alt="Gambar Cerita Danau Lipan">
+            <h2>Lutung Kasarung</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.8</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritasipitung.svg" alt="Gambar Cerita Si Pitung">
+            <h2>Si Pitung</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritamenangis.svg" alt="Gambar Cerita Batu Menangis">
+            <h2>Batu Menangis</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritabatu.svg" alt="Gambar Cerita La Sirimbone">
+            <h2>Batu Golog</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/cerita62.svg" alt="Gambar Cerita Suwidak Loro">
             <h2>Suwidak Loro</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
                 <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka">
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
-
         <div class="cerita-wrapper">
-            <img class="sampul" src="ceritatodilaling.png" alt="Gambar Cerita To Dilaling">
-            <h2>To Dilaling</h2>
+            <img class="sampul" src="img/ceritaputri.svg" alt="Gambar Cerita Putri Ular">
+            <h2>Putri Ular</h2>
             <hr>
             <div class="rating">
                 <span class="star">⭐</span>
                 <span class="rating-number">4.4</span>
-                <img class="icon-small" src="simbolsuka.png" title="suka"> 
-                <img class="icon-small" src="simbolsimpan.png" title="simpan">
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritapangeran.svg" alt="Gambar Cerita Pangeran Amat Mude">
+            <h2>Pangeran Amat Mude</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.3</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
+            </div>
+        </div>
+        <div class="cerita-wrapper">
+            <img class="sampul" src="img/ceritakeliling.svg" alt="Gambar Cerita Si Kelingking">
+            <h2>Si Kelingking</h2>
+            <hr>
+            <div class="rating">
+                <span class="star">⭐</span>
+                <span class="rating-number">4.4</span>
+                <img class="icon-small" src="img/suka.svg" title="suka">
+                <img class="icon-small" src="img/simpan.svg" title="simpan">
             </div>
         </div>
     </div>
