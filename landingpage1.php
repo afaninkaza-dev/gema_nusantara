@@ -1,21 +1,5 @@
 <?php
-session_start();
 include 'koneksi.php';
-
-$user_id = $_SESSION['id'] ?? 0;
-$logged_in = $user_id > 0;
-
-// Ambil foto profil terbaru dari database
-$_nav_foto = 'img/profile.jpg';
-if ($logged_in) {
-    $_q_foto = $conn->prepare("SELECT foto FROM user WHERE id = ?");
-    $_q_foto->bind_param("i", $user_id);
-    $_q_foto->execute();
-    $_nav_user = $_q_foto->get_result()->fetch_assoc();
-    if (!empty($_nav_user['foto']) && file_exists($_nav_user['foto'])) {
-        $_nav_foto = $_nav_user['foto'];
-    }
-}
 
 // ── Ambil data cerita ──────────────────────────────────────────────────────
 // Rating tertinggi
@@ -50,35 +34,15 @@ $result_saran = $conn->query("
     ORDER BY s.waktu DESC LIMIT 10
 ");
 
-// Status like & simpan user (untuk inisialisasi ikon)
-$liked_ids = $saved_ids = [];
-if ($logged_in) {
-    $r = $conn->query("SELECT cerita_id FROM suka WHERE user_id = $user_id");
-    while ($row = $r->fetch_assoc())
-        $liked_ids[] = $row['cerita_id'];
-
-    $r = $conn->query("SELECT cerita_id FROM simpan WHERE user_id = $user_id");
-    while ($row = $r->fetch_assoc())
-        $saved_ids[] = $row['cerita_id'];
-}
-
-// Helper ikon
-function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
+// Helper ikon — semua onclick redirect masuk.php
+function ikonKartu($cerita_id)
 {
-    $liked = in_array($cerita_id, $liked_ids) ? 'liked' : '';
-    $saved = in_array($cerita_id, $saved_ids) ? 'saved' : '';
     return "
         <div class=\"icon-wrapper\">
-            <span class=\"material-icons icon-aksi btn-like {$liked}\"
-                  data-id=\"{$cerita_id}\"
-                  onclick=\"event.stopPropagation(); toggleKartu(this,'like')\">
-                " . ($liked ? 'favorite' : 'favorite_border') . "
-            </span>
-            <span class=\"material-icons icon-aksi btn-simpan {$saved}\"
-                  data-id=\"{$cerita_id}\"
-                  onclick=\"event.stopPropagation(); toggleKartu(this,'simpan')\">
-                " . ($saved ? 'bookmark' : 'bookmark_border') . "
-            </span>
+            <span class=\"material-icons icon-aksi\"
+                  onclick=\"event.stopPropagation(); redirectMasuk()\">favorite_border</span>
+            <span class=\"material-icons icon-aksi\"
+                  onclick=\"event.stopPropagation(); redirectMasuk()\">bookmark_border</span>
         </div>";
 }
 ?>
@@ -92,15 +56,13 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
     <link rel="icon" href="img/logoweb.svg">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        crossorigin="anonymous" />
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             margin: 0;
@@ -120,9 +82,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             justify-content: space-between;
             box-shadow: 0 2px 10px rgba(141, 138, 138, .15);
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             width: 100%;
             z-index: 1000;
             box-sizing: border-box;
@@ -135,9 +95,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             cursor: pointer;
         }
 
-        .logo img {
-            width: 40px;
-        }
+        .logo img { width: 40px; }
 
         .logo p {
             font-size: 13px;
@@ -169,104 +127,11 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             font-weight: 700;
         }
 
-        nav .profile {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform .2s;
-        }
-
-        nav .profile:hover {
-            transform: scale(1.1);
-        }
-
-        /* ── Dropdown profil ── */
-        .profile-dropdown {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .profile-dropdown .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
-            min-width: 180px;
-            padding: 8px 0;
-            z-index: 2000;
-        }
-
-        .profile-dropdown .dropdown-menu.open {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            text-decoration: none;
-            transition: background .15s;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f5f0ed;
-            color: #6D4A37;
-        }
-
-        .dropdown-menu a.keluar {
-            color: #C0392B;
-        }
-
-        .dropdown-menu a.keluar:hover {
-            background: #fdf0ee;
-        }
-
-        .dropdown-menu hr {
-            border: none;
-            border-top: 1px solid #eee;
-            margin: 4px 0;
-        }
-
         .menu-icon {
             display: none;
             font-size: 24px;
             color: #000;
             cursor: pointer;
-        }
-
-        @media (max-width:900px) {
-            .menu-icon {
-                display: block;
-            }
-
-            .nav-menu {
-                position: absolute;
-                top: 65px;
-                right: 0;
-                background: #FEFDF7;
-                flex-direction: column;
-                width: 200px;
-                padding: 15px 0;
-                gap: 20px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, .2);
-                border-radius: 8px;
-                margin: 0;
-                display: none;
-            }
-
-            .nav-menu.active {
-                display: flex;
-            }
         }
 
         /* ── HERO ── */
@@ -321,20 +186,9 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             object-fit: cover;
         }
 
-        .first {
-            position: relative;
-            top: 0;
-        }
-
-        .second {
-            position: relative;
-            top: 40px;
-        }
-
-        .third {
-            position: relative;
-            top: 80px;
-        }
+        .first  { position: relative; top: 0; }
+        .second { position: relative; top: 40px; }
+        .third  { position: relative; top: 80px; }
 
         /* ── QUOTE ── */
         .container {
@@ -345,10 +199,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             text-align: center;
         }
 
-        .image-container {
-            position: relative;
-            margin-bottom: 20px;
-        }
+        .image-container { position: relative; margin-bottom: 20px; }
 
         .image-container img {
             width: 100%;
@@ -372,16 +223,10 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             z-index: 10;
         }
 
-        .author {
-            font-style: italic;
-            margin-top: 10px;
-        }
+        .author { font-style: italic; margin-top: 10px; }
 
         /* ── KARTU BUKU ── */
-        .section {
-            text-align: center;
-            margin: 20px 0;
-        }
+        .section { text-align: center; margin: 20px 0; }
 
         .judul-rating {
             display: flex;
@@ -392,17 +237,9 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             margin: 0 auto 10px;
         }
 
-        .judul-rating h3 {
-            font-size: 26px;
-            font-weight: 600;
-            color: #333;
-        }
+        .judul-rating h3 { font-size: 26px; font-weight: 600; color: #333; }
 
-        .judul-rating a {
-            font-size: 15px;
-            color: #4b4b4b;
-            text-decoration: none;
-        }
+        .judul-rating a { font-size: 15px; color: #4b4b4b; text-decoration: none; }
 
         .buku-card {
             display: grid;
@@ -457,11 +294,9 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             gap: 7px;
         }
 
-        .rating-number {
-            font-size: 14px;
-            font-weight: 500;
-            margin-right: auto;
-        }
+        .rating-number { font-size: 14px; font-weight: 500; margin-right: auto; }
+
+        .icon-wrapper { display: flex; gap: 4px; }
 
         .icon-aksi {
             font-size: 20px !important;
@@ -469,22 +304,10 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             transition: color .2s, transform .2s;
         }
 
-        .icon-aksi:hover {
-            transform: scale(1.2);
-        }
-
-        .icon-aksi.liked {
-            color: #E74C3C !important;
-        }
-
-        .icon-aksi.saved {
-            color: #FFD700 !important;
-        }
+        .icon-aksi:hover { transform: scale(1.2); }
 
         /* ── BARU DITAMBAHKAN ── */
-        #baru_ditambahkan {
-            padding: 30px 190px;
-        }
+        #baru_ditambahkan { padding: 30px 190px; }
 
         .cerita_container {
             display: flex;
@@ -504,9 +327,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
 
         .coklat {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             height: 80%;
             background: #6D4A37;
             border-radius: 8px;
@@ -518,61 +339,32 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             height: 250px;
             border-radius: 10px;
             z-index: 2;
-            position: relative;
-            left: 15px;
-            bottom: 15px;
             object-fit: cover;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, .3);
+            flex-shrink: 0;
         }
 
         .cerita_detail {
-            position: relative;
             z-index: 2;
+            padding: 16px 16px 16px 20px;
+            color: #F7F4E9;
             flex: 1;
-            padding: 15px 15px 15px 25px;
-            color: #fff;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            height: 82%;
+            gap: 8px;
             overflow: hidden;
         }
 
         .detail_top_baru {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            border-bottom: 1.4px solid rgba(255, 255, 255, .5);
-            padding-bottom: 6px;
-            margin-bottom: 10px;
+            align-items: flex-start;
+            gap: 8px;
         }
 
         .detail_top_baru h2 {
             font-size: 16px;
             font-weight: 600;
             margin: 0;
-        }
-
-        /* Merapatkan Ikon */
-        .icon-wrapper {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
-
-        .icon-aksi {
-            font-size: 20px !important;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .icon-aksi.liked {
-            color: #E74C3C !important;
-        }
-
-        .icon-aksi.saved {
-            color: #FFD700 !important;
         }
 
         .cerita_detail p {
@@ -609,10 +401,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             transition: all .3s;
         }
 
-        #saran:hover {
-            background: #5a3d2d;
-            transform: scale(1.05);
-        }
+        #saran:hover { background: #5a3d2d; transform: scale(1.05); }
 
         .saran_container {
             display: flex;
@@ -635,9 +424,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             flex-shrink: 0;
         }
 
-        .saran_item.active {
-            display: block;
-        }
+        .saran_item.active { display: block; }
 
         .saran_top {
             display: flex;
@@ -648,16 +435,8 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             border-bottom: 2px solid #f0f0f0;
         }
 
-        .saran_top .profile {
-            width: 42px;
-            height: 42px;
-        }
-
-        .saran_top h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-        }
+        .saran_top .profile { width: 42px; height: 42px; }
+        .saran_top h3 { margin: 0; font-size: 16px; font-weight: 600; }
 
         .isi_saran p {
             font-size: 13px;
@@ -692,9 +471,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             z-index: 9999;
         }
 
-        #toast.show {
-            opacity: 1;
-        }
+        #toast.show { opacity: 1; }
 
         /* ── FOOTER ── */
         footer {
@@ -713,9 +490,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             margin: 0 auto;
         }
 
-        #tentang-web {
-            max-width: 420px;
-        }
+        #tentang-web { max-width: 420px; }
 
         #tentang-web p {
             margin-top: 12px;
@@ -723,27 +498,12 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             text-align: justify;
         }
 
-        footer h3 {
-            margin-bottom: 12px;
-            font-size: 15px;
-            color: #6D4A37;
-        }
+        footer h3 { margin-bottom: 12px; font-size: 15px; color: #6D4A37; }
 
-        footer ul {
-            list-style: none;
-            padding: 0;
-            line-height: 2.2em;
-        }
+        footer ul { list-style: none; padding: 0; line-height: 2.2em; }
 
-        footer a {
-            text-decoration: none;
-            color: #000;
-            transition: color .2s;
-        }
-
-        footer a:hover {
-            color: #6D4A37;
-        }
+        footer a { text-decoration: none; color: #000; transition: color .2s; }
+        footer a:hover { color: #6D4A37; }
 
         .footer_bottom {
             padding: 1.5em 4%;
@@ -759,14 +519,11 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
         }
 
         @media (max-width:900px) {
-            .menu-icon {
-                display: block;
-            }
+            .menu-icon { display: block; }
 
             .nav-menu {
                 position: absolute;
-                top: 65px;
-                right: 0;
+                top: 65px; right: 0;
                 background: #FEFDF7;
                 flex-direction: column;
                 width: 200px;
@@ -778,26 +535,15 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
                 display: none;
             }
 
-            .nav-menu.active {
-                display: flex;
-            }
+            .nav-menu.active { display: flex; }
 
-            .buku-card {
-                grid-template-columns: repeat(2, 200px);
-            }
+            .buku-card { grid-template-columns: repeat(2, 200px); }
 
-            #baru_ditambahkan {
-                padding: 30px 20px;
-            }
+            #baru_ditambahkan { padding: 30px 20px; }
 
-            .cerita_container {
-                flex-direction: column;
-                align-items: center;
-            }
+            .cerita_container { flex-direction: column; align-items: center; }
 
-            .cerita_wrapper {
-                width: 90%;
-            }
+            .cerita_wrapper { width: 90%; }
         }
     </style>
 </head>
@@ -805,68 +551,41 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
 <body>
 
     <nav>
-        <div class="logo" onclick="location.href='landingpage.php'">
+        <div class="logo" onclick="location.href='landingpage1.php'">
             <img src="img/logoweb.svg" alt="logo">
             <p>Gema<br>Nusantara</p>
         </div>
         <div class="menu-icon" id="menu-icon"><i class="ph ph-list"></i></div>
         <div class="nav-menu" id="nav-menu">
-            <a  class="active" href="landingpage.php">Beranda</a>
-            <a href="jelajahi.php">Jelajahi</a>
-            <a href="saran.php">Saran</a>
-            <?php if ($logged_in): ?>
-                <div class="profile-dropdown">
-                    <img class="profile" src="<?= htmlspecialchars($_nav_foto) ?>" alt="profil" id="profileBtn"
-                        onclick="toggleDropdown()">
-                    <div class="dropdown-menu" id="profileDropdown">
-                        <a href="settingakun_baru.php">
-                            <i style="font-size:16px;width:18px;text-align:center;" class="fas fa-user"></i> Profil
-                        </a>
-                        <hr>
-                        <a href="masuk.php" class="keluar">
-                            <i style="font-size:16px;width:18px;text-align:center;" class="fas fa-sign-out-alt"></i> Keluar
-                        </a>
-                    </div>
-                </div>
-            <?php else: ?>
-                <a href="masuk.php">Masuk</a>
-            <?php endif; ?>
+            <a class="active" href="landingpage1.php">Beranda</a>
+            <a href="jelajahi_belumlogin.php">Jelajahi</a>
+            <img class="profile" src="img/profile.svg" alt="profil" onclick="location.href='masuk.php'"
+                style="width:35px;height:35px;border-radius:50%;cursor:pointer;transition:transform .2s;"
+                onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
+                title="Masuk">
         </div>
     </nav>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        crossorigin="anonymous" />
     <script>
         document.getElementById('menu-icon').addEventListener('click', () => {
             document.getElementById('nav-menu').classList.toggle('active');
-        });
-        function toggleDropdown() {
-            const dd = document.getElementById('profileDropdown');
-            dd.classList.toggle('open');
-        }
-        document.addEventListener('click', function (e) {
-            const btn = document.getElementById('profileBtn');
-            const dd = document.getElementById('profileDropdown');
-            if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
-                dd.classList.remove('open');
-            }
         });
     </script>
 
     <!-- HERO -->
     <section class="hero">
         <h2>Seribu Cerita Dalam Genggamanmu</h2>
-        <a id="jelajahi" href="jelajahi.php">Jelajahi</a>
+        <a id="jelajahi" href="jelajahi_belumlogin.php">Jelajahi</a>
     </section>
 
     <!-- GAMBAR DEKORATIF -->
     <section style="text-align:center;">
         <div class="cerita_row">
-            <img class="first" src="img/ceritaabo.svg" alt="buku 1">
-            <img class="second" src="img/ceritabawang.svg" alt="buku 2">
-            <img class="third" src="img/ceritalutung.svg" alt="buku 3">
-            <img class="second" src="img/ceritakeong.svg" alt="buku 4">
-            <img class="first" src="img/ceritatimun.svg" alt="buku 5">
+            <img class="first"  src="img/ceritaabo.svg"     alt="buku 1">
+            <img class="second" src="img/ceritabawang.svg"  alt="buku 2">
+            <img class="third"  src="img/ceritalutung.svg"  alt="buku 3">
+            <img class="second" src="img/ceritakeong.svg"   alt="buku 4">
+            <img class="first"  src="img/ceritatimun.svg"   alt="buku 5">
         </div>
     </section>
 
@@ -887,12 +606,13 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
     <section class="section">
         <div class="judul-rating">
             <h3>Rating Tertinggi</h3>
-            <a href="jelajahi.php">Lihat Semua &gt;</a>
+            <a href="jelajahi_belumlogin.php">Lihat Semua &gt;</a>
         </div>
         <div class="buku-card">
             <?php if ($result_rating && $result_rating->num_rows > 0): ?>
                 <?php while ($buku = $result_rating->fetch_assoc()): ?>
-                    <a class="kotak-buku" href="detailbuku.php?id=<?= $buku['id'] ?>">
+                    <!-- Klik kartu → redirect masuk.php -->
+                    <div class="kotak-buku" onclick="redirectMasuk()">
                         <img class="sampul" src="buku/<?= htmlspecialchars($buku['sampul']) ?>"
                             alt="<?= htmlspecialchars($buku['judul']) ?>">
                         <h2><?= htmlspecialchars($buku['judul']) ?></h2>
@@ -900,9 +620,9 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
                         <div class="rating-row">
                             <span>⭐</span>
                             <span class="rating-number"><?= $buku['avg_rating'] ?? '-' ?></span>
-                            <?= ikonKartu($buku['id'], $liked_ids, $saved_ids, $logged_in) ?>
+                            <?= ikonKartu($buku['id']) ?>
                         </div>
-                    </a>
+                    </div>
                 <?php endwhile; ?>
             <?php else: ?>
                 <p style="color:#999;grid-column:span 4;">Belum ada data.</p>
@@ -914,12 +634,12 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
     <section class="section">
         <div class="judul-rating">
             <h3>Populer Bulan Ini</h3>
-            <a href="jelajahi.php">Lihat Semua &gt;</a>
+            <a href="jelajahi_belumlogin.php">Lihat Semua &gt;</a>
         </div>
         <div class="buku-card">
             <?php if ($result_populer && $result_populer->num_rows > 0): ?>
                 <?php while ($buku = $result_populer->fetch_assoc()): ?>
-                    <a class="kotak-buku" href="detailbuku.php?id=<?= $buku['id'] ?>">
+                    <div class="kotak-buku" onclick="redirectMasuk()">
                         <img class="sampul" src="buku/<?= htmlspecialchars($buku['sampul']) ?>"
                             alt="<?= htmlspecialchars($buku['judul']) ?>">
                         <h2><?= htmlspecialchars($buku['judul']) ?></h2>
@@ -927,9 +647,9 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
                         <div class="rating-row">
                             <span>⭐</span>
                             <span class="rating-number"><?= $buku['avg_rating'] ?? '-' ?></span>
-                            <?= ikonKartu($buku['id'], $liked_ids, $saved_ids, $logged_in) ?>
+                            <?= ikonKartu($buku['id']) ?>
                         </div>
-                    </a>
+                    </div>
                 <?php endwhile; ?>
             <?php else: ?>
                 <p style="color:#999;grid-column:span 4;">Belum ada data.</p>
@@ -939,21 +659,23 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
 
     <!-- BARU DITAMBAHKAN -->
     <section id="baru_ditambahkan">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2 style="font-size: 26px; font-weight: 600">Baru Ditambahkan</h2>
-            <a href="jelajahi.php" style="text-decoration:none; color:#4b4b4b;">Lihat Semua &gt;</a>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+            <h2 style="font-size:26px;font-weight:600;">Baru Ditambahkan</h2>
+            <a href="jelajahi_belumlogin.php" style="text-decoration:none;color:#4b4b4b;">Lihat Semua &gt;</a>
         </div>
         <div class="cerita_container">
             <?php if ($result_baru && $result_baru->num_rows > 0): ?>
                 <?php while ($cerita = $result_baru->fetch_assoc()): ?>
                     <?php $sinopsis = mb_strimwidth($cerita['sinopsis'], 0, 180, "..."); ?>
-                    <div class="cerita_wrapper" onclick="location.href='detailbuku.php?id=<?= $cerita['id'] ?>'">
+                    <!-- Klik kartu → redirect masuk.php -->
+                    <div class="cerita_wrapper" onclick="redirectMasuk()">
                         <div class="coklat"></div>
-                        <img src="buku/<?= htmlspecialchars($cerita['sampul']) ?>" class="sampul-baru">
+                        <img src="buku/<?= htmlspecialchars($cerita['sampul']) ?>" class="sampul-baru"
+                            alt="<?= htmlspecialchars($cerita['judul']) ?>">
                         <div class="cerita_detail">
                             <div class="detail_top_baru">
                                 <h2><?= htmlspecialchars($cerita['judul']) ?></h2>
-                                <?= ikonKartu($cerita['id'], $liked_ids, $saved_ids, $logged_in) ?>
+                                <?= ikonKartu($cerita['id']) ?>
                             </div>
                             <p><?= htmlspecialchars($sinopsis) ?></p>
                         </div>
@@ -962,10 +684,12 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             <?php endif; ?>
         </div>
     </section>
-    <!-- SARAN -->
+
+    <!-- SARAN — guest diarahkan login dulu -->
     <section id="ulasan">
         <h2>Belum Menemukan Cerita Rakyat Favoritmu?</h2>
-        <a id="saran" href="saran.php">Beri Saran</a>
+        <!-- Tombol Beri Saran → masuk.php -->
+        <a id="saran" href="masuk.php">Beri Saran</a>
         <div class="saran_container">
             <div class="panah" onclick="plusSaran(-1)">‹</div>
             <?php
@@ -977,14 +701,15 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
                     $cls = $first ? 'active' : '';
                     $first = false;
                     echo "<div class='saran_item $cls'>
-                    <div class='saran_top'><img class='profile' src='img/profile.svg' alt=''><h3>" . htmlspecialchars($s['nama']) . "</h3></div>
-                    <div class='isi_saran'><p>\"" . htmlspecialchars($s['isi_saran']) . "\"</p></div>
-                </div>";
+                        <div class='saran_top'><img class='profile' src='img/profile.svg' alt=''><h3>" . htmlspecialchars($s['nama']) . "</h3></div>
+                        <div class='isi_saran'><p>\"" . htmlspecialchars($s['isi_saran']) . "\"</p></div>
+                    </div>";
                 }
             }
             if (!$ada): ?>
                 <div class="saran_item active">
-                    <div class="saran_top"><img class="profile" src="img/profile.svg" alt="">
+                    <div class="saran_top">
+                        <img class="profile" src="img/profile.svg" alt="">
                         <h3>Andi Pratama</h3>
                     </div>
                     <div class="isi_saran">
@@ -1009,9 +734,8 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             <div id="navigasi">
                 <h3>Navigasi</h3>
                 <ul>
-                    <li><a href="landingpage.php">Beranda</a></li>
-                    <li><a href="jelajahi.php">Jelajahi</a></li>
-                    <li><a href="saran.php">Saran</a></li>
+                    <li><a href="landingpage1.php">Beranda</a></li>
+                    <li><a href="jelajahi_belumlogin.php">Jelajahi</a></li>
                 </ul>
             </div>
             <div id="kontak">
@@ -1034,39 +758,16 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
     <div id="toast"></div>
 
     <script>
-        const LOGGED_IN = <?= $logged_in ? 'true' : 'false' ?>;
+        function redirectMasuk() {
+            showToast('Silakan masuk terlebih dahulu');
+            setTimeout(() => { window.location.href = 'masuk.php'; }, 1000);
+        }
 
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2500);
-        }
-
-        async function toggleKartu(el, jenis) {
-            if (!LOGGED_IN) {
-                showToast('Silakan masuk terlebih dahulu');
-                return;
-            }
-            const ceritaId = el.dataset.id;
-            const aksi = jenis === 'like' ? 'toggle_like' : 'toggle_simpan';
-            const fd = new FormData();
-            fd.append('aksi', aksi);
-            fd.append('cerita_id', ceritaId);
-
-            const res = await fetch('aksi_user.php', { method: 'POST', body: fd });
-            const data = await res.json();
-            if (data.status === 'error') { showToast(data.message); return; }
-
-            if (jenis === 'like') {
-                el.classList.toggle('liked', data.liked);
-                el.textContent = data.liked ? 'favorite' : 'favorite_border';
-                showToast(data.liked ? 'Ditambahkan ke Cerita Disukai' : 'Dihapus dari Cerita Disukai');
-            } else {
-                el.classList.toggle('saved', data.saved);
-                el.textContent = data.saved ? 'bookmark' : 'bookmark_border';
-                showToast(data.saved ? 'Ditambahkan ke Cerita Tersimpan' : 'Dihapus dari Cerita Tersimpan');
-            }
         }
 
         // Saran slider
@@ -1082,7 +783,7 @@ function ikonKartu($cerita_id, $liked_ids, $saved_ids, $logged_in)
             items[saranIndex - 1].style.display = 'block';
         }
     </script>
-</body>
 
+</body>
 </html>
 <?php $conn->close(); ?>

@@ -1,312 +1,607 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+if (!isset($_SESSION['id'])) {
+    header("Location: masuk.php");
+    exit;
+}
+
+$user_id = $_SESSION['id'];
+$active_page = 'profil';
+
+// Satu query saja
+$stmt = $conn->prepare("SELECT nama, email, foto FROM user WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$user = $stmt->get_result()->fetch_assoc();
+
+$pesan = '';
+
+// Handle upload foto — form terpisah dengan flag 'aksi=foto'
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'foto') {
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        $ftype = mime_content_type($_FILES['foto']['tmp_name']);
+
+        if (in_array($ftype, $allowed)) {
+            $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+            $filename = 'foto_' . $user_id . '_' . time() . '.' . $ext;
+            $target = 'img/profil/' . $filename;
+
+            if (!is_dir('img/profil'))
+                mkdir('img/profil', 0755, true);
+
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
+                if (!empty($user['foto']) && $user['foto'] !== 'img/profile.jpg' && file_exists($user['foto'])) {
+                    unlink($user['foto']);
+                }
+                $upd = $conn->prepare("UPDATE user SET foto=? WHERE id=?");
+                $upd->bind_param("si", $target, $user_id);
+                $upd->execute();
+                $user['foto'] = $target;
+                $pesan = ['tipe' => 'sukses', 'isi' => 'Foto profil berhasil diperbarui.'];
+            } else {
+                $pesan = ['tipe' => 'error', 'isi' => 'Gagal menyimpan foto.'];
+            }
+        } else {
+            $pesan = ['tipe' => 'error', 'isi' => 'Format foto tidak didukung. Gunakan JPG, PNG, atau WEBP.'];
+        }
+    } else {
+        $pesan = ['tipe' => 'error', 'isi' => 'Gagal mengupload foto. Coba lagi.'];
+    }
+}
+
+// Handle simpan profil
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'profil') {
+    $nama = trim($_POST['nama'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password_baru = $_POST['password'] ?? '';
+
+    if ($nama === '' || $email === '') {
+        $pesan = ['tipe' => 'error', 'isi' => 'Nama dan email tidak boleh kosong.'];
+    } else {
+        if ($password_baru !== '') {
+            $hash = password_hash($password_baru, PASSWORD_DEFAULT);
+            $upd = $conn->prepare("UPDATE user SET nama=?, email=?, password=? WHERE id=?");
+            $upd->bind_param("sssi", $nama, $email, $hash, $user_id);
+        } else {
+            $upd = $conn->prepare("UPDATE user SET nama=?, email=? WHERE id=?");
+            $upd->bind_param("ssi", $nama, $email, $user_id);
+        }
+
+        if ($upd->execute()) {
+            $_SESSION['nama'] = $nama;
+            $user['nama'] = $nama;
+            $user['email'] = $email;
+            $pesan = ['tipe' => 'sukses', 'isi' => 'Profil berhasil diperbarui.'];
+        } else {
+            $pesan = ['tipe' => 'error', 'isi' => 'Gagal memperbarui profil: ' . $upd->error];
+        }
+    }
+}
+
+// Handle upload foto sidebar — harus di atas sebelum HTML dikirim
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'foto_sidebar') {
+    // Ambil data user untuk keperluan hapus foto lama
+    $_sbq = $conn->prepare("SELECT foto FROM user WHERE id = ?");
+    $_sbq->bind_param("i", $user_id);
+    $_sbq->execute();
+    $_sb_old = $_sbq->get_result()->fetch_assoc();
+
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        $ftype = mime_content_type($_FILES['foto']['tmp_name']);
+        if (in_array($ftype, $allowed) && $_FILES['foto']['size'] <= 2 * 1024 * 1024) {
+            $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+            $filename = 'foto_' . $user_id . '_' . time() . '.' . $ext;
+            $target = 'img/profil/' . $filename;
+            if (!is_dir('img/profil'))
+                mkdir('img/profil', 0755, true);
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
+                if (!empty($_sb_old['foto']) && $_sb_old['foto'] !== 'img/profile.jpg' && file_exists($_sb_old['foto']))
+                    unlink($_sb_old['foto']);
+                $upd = $conn->prepare("UPDATE user SET foto=? WHERE id=?");
+                $upd->bind_param("si", $target, $user_id);
+                $upd->execute();
+            }
+        }
+    }
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Akun</title>
+    <title>Pengaturan Akun - Gema Nusantara</title>
+    <link rel="icon" href="img/logoweb.svg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
+            font-family: 'Poppins', sans-serif;
             background-color: #F7F7F7;
             color: #333;
+            min-height: 100vh;
         }
 
         .container {
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
-        .sidebar {
-            width: 240px;
-            background-color: #fff;
-            padding: 20px 15px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            position: relative;
-            box-sizing: border-box;
-        }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            margin-bottom: 24px;
-            gap: 10px;
-        }
-
-        .logo img {
-            width: 40px;
-        }
-
-        .logo p {
-            font-size: 16px;
-            line-height: 1.2em;
-            font-weight: 600;
-            color: #6D4A37;
-            margin: 0;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .profile-wrapper {
-            position: relative;
-            align-self: center;
-            margin-bottom: 24px;
-        }
-
-        .profile-wrapper img {
-            width: 110px;
-            display: block;
-        }
-
-        .sidebar .edit-icon {
-            position: absolute;
-            bottom: 0px;
-            right: 0px;
-            background-color: #fff;
-            border-radius: 50%;
-            padding: 5px;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            margin-bottom: 4px;
-            text-decoration: none;
-            color: #000;
-            transition: all 0.3s ease;
-            font-size: 14px;
-            font-weight: 400;
-            font-family: 'Poppins', sans-serif;
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 8px;
-        }
-
-        .sidebar a i {
-            margin-right: 12px;
-            width: 20px;
-            text-align: center;
-            font-size: 16px;
-        }
-
-        .sidebar a:hover {
-            color: #6D4A37;
-            background-color: #f5f5f5;
-        }
-
-        .sidebar a.active {
-            font-weight: 400;
-            color: #fff;
-            background-color: #6D4A37;
-        }
-
-        .logout-button {
-            margin-top: auto;
-            padding-top: 16px;
-            border-top: 1px solid #eee;
-            font-weight: 400;
-            width: 100%;
-            color: #C0392B !important;
-            border-radius: 8px;
-        }
-
+        /* CONTENT */
         .content {
             flex: 1;
-            padding: 30px;
+            min-width: 0;
+            padding: 40px 80px;
             overflow-y: auto;
         }
 
         .content h1 {
             font-size: 22px;
-            margin-bottom: 40px;
-            margin-left: 60px;
             font-weight: 600;
-            font-family: 'Poppins', sans-serif;
+            margin-bottom: 32px;
         }
 
+        /* ALERT */
+        .alert {
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            margin-bottom: 24px;
+        }
+
+        .alert.sukses {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
+        .alert.error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        /* FORM */
         .form-group {
-            margin-bottom: 20px;
-            margin-left: 60px;
+            margin-bottom: 22px;
         }
 
         label {
             display: block;
             font-size: 13px;
-            color: #000;
+            color: #444;
             margin-bottom: 8px;
-            font-family: 'Poppins', sans-serif;
+        }
+
+        .input-wrap {
+            position: relative;
         }
 
         input[type="text"],
         input[type="email"],
-        input[type="tel"],
-        input[type="password"],
-        select {
-            width: 70%;
-            padding: 12px;
-            border: 1px solid #94A3B8;
-            border-radius: 5px;
+        input[type="password"] {
+            width: 100%;
+            padding: 11px 40px 11px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
             font-size: 14px;
+            font-family: 'Poppins', sans-serif;
             color: #333;
+            background: #fff;
+            transition: border-color .2s;
             box-sizing: border-box;
-            transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="tel"]:focus,
-        input[type="password"]:focus,
+        input:focus {
+            border-color: #6D4A37;
+            outline: none;
+        }
+
+        .input-wrap i {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+            color: #94A3B8;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .inline-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .inline-group>div {
+            flex: 1;
+        }
+
+        select {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: #fff;
+            transition: border-color .2s;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
         select:focus {
             border-color: #6D4A37;
             outline: none;
         }
 
-        .input-with-icon {
-            position: relative;
-            width: 70%;
-            /* Disesuaikan dengan lebar input */
-        }
-
-        .input-with-icon input {
-            width: 100%;
-            /* Menghindari luapan */
-            padding-right: 40px;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            color: #94A3B8;
+        .btn-simpan {
+            margin-top: 10px;
+            padding: 11px 32px;
+            background: #6D4A37;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
+            transition: background .2s;
         }
 
-        .form-group.inline {
-            display: flex;
-            width: 70%;
-            gap: 20px;
+        .btn-simpan:hover {
+            background: #5a3d2d;
         }
 
-        .form-group.inline>div {
-            flex: 1;
-        }
-
-        .form-group.inline select {
-            width: 100%;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
+        @media (max-width: 700px) {
+            .content {
+                padding: 24px 20px;
             }
 
+            .inline-group {
+                flex-direction: column;
+            }
+        }
+
+        /* ── SIDEBAR ── */
+        .sidebar {
+            width: 220px;
+            background-color: #fff;
+            padding: 24px 16px 20px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, .06);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            flex-shrink: 0;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sb-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 28px;
+            text-decoration: none;
+        }
+
+        .sb-logo img {
+            width: 36px;
+        }
+
+        .sb-logo-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #6D4A37;
+            line-height: 1.25;
+        }
+
+        .sb-profile-form {
+            align-self: center;
+            margin-bottom: 28px;
+        }
+
+        .sb-profile-wrap {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .sb-profile-wrap img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .sb-overlay {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .sb-profile-wrap:hover .sb-overlay {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .sb-overlay i {
+            color: #fff;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .sb-profile-wrap:hover .sb-overlay i {
+            opacity: 1;
+        }
+
+        .sb-upload-loading {
+            display: none;
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sb-upload-loading.show {
+            display: flex;
+        }
+
+        .sb-upload-loading i {
+            color: #fff;
+            font-size: 22px;
+            animation: sb-spin 1s linear infinite;
+        }
+
+        @keyframes sb-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .sidebar nav {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            text-decoration: none;
+            color: #444;
+            font-size: 13.5px;
+            font-weight: 400;
+            border-radius: 8px;
+            transition: background .2s, color .2s;
+        }
+
+        .sidebar a i {
+            width: 18px;
+            text-align: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .sidebar a:hover {
+            background: #f5f0ed;
+            color: #6D4A37;
+        }
+
+        .sidebar a.active {
+            background: #6D4A36;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .sidebar .logout-btn {
+            margin-top: auto;
+            color: #C0392B !important;
+            font-weight: 500 !important;
+        }
+
+        .sidebar .logout-btn:hover {
+            background: #fdf0ee !important;
+        }
+
+        @media (max-width: 700px) {
             .sidebar {
-                width: 100%;
-                height: auto;
-                align-items: center;
+                width: 60px;
+                padding: 16px 8px;
+            }
+
+            .sb-logo-text,
+            .sidebar a span {
+                display: none;
             }
 
             .sidebar a {
+                padding: 10px;
                 justify-content: center;
+                gap: 0;
             }
 
-            .content h1,
-            .form-group {
-                margin-left: 0;
+            .sidebar a i {
+                width: auto;
+                font-size: 18px;
             }
 
-            input[type="text"],
-            input[type="email"],
-            input[type="tel"],
-            input[type="password"],
-            select,
-            .input-with-icon,
-            .form-group.inline {
-                width: 100%;
+            .sb-profile-wrap,
+            .sb-profile-wrap img {
+                width: 40px;
+                height: 40px;
             }
+
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+
+        <?php
+        // ── Sidebar inline ──
+        $_sb = $conn->prepare("SELECT nama, foto FROM user WHERE id = ?");
+        $_sb->bind_param("i", $user_id);
+        $_sb->execute();
+        $_sb_user = $_sb->get_result()->fetch_assoc();
+        $_foto_src = (!empty($_sb_user['foto']) && file_exists($_sb_user['foto']))
+            ? $_sb_user['foto'] : 'img/profile.jpg';
+
+        // Handle upload foto dari sidebar
+        
+        ?>
         <div class="sidebar">
-            <div class="logo">
-                <a href="landingpage.html"><img src="img/logoweb.svg" alt="logo web"></a>
-                <p>Gema <br>Nusantara</p>
-            </div>
+            <a href="landingpage.php" class="sb-logo">
+                <img src="img/logoweb.svg" alt="logo">
+                <span class="sb-logo-text">Gema<br>Nusantara</span>
+            </a>
+            <form id="sbFormFoto" class="sb-profile-form" method="POST" enctype="multipart/form-data" action="">
+                <input type="hidden" name="aksi" value="foto_sidebar">
+                <div class="sb-profile-wrap">
+                    <img src="<?= htmlspecialchars($_foto_src) ?>" alt="Foto Profil" id="sbPreviewFoto">
+                    <label for="sbInputFoto" class="sb-overlay" title="Ganti foto"><i class="fas fa-camera"></i></label>
 
-            <div class="profile-wrapper">
-                <img src="img/profile22.svg" alt="Foto Profil">
-                <div class="edit-icon"><i class="fas fa-pen"></i></div>
-            </div>
-
-            <a class="active" href="settingakun_baru.php"><i class="fas fa-user-cog"></i> Pengaturan Akun</a>
-            <a href="dashboard_user.php"><i class="fas fa-tasks"></i> Aktivitas Saya</a>
-            <a href="dashboardsimpan_user.php"><i class="fas fa-bookmark"></i> Cerita Tersimpan</a>
-            <a href="dashboardsuka_user.php"><i class="fas fa-heart"></i> Cerita Disukai</a>
-            <a href="dashboardulasan_user.php"><i class="fas fa-comment-alt"></i> Riwayat Ulasan</a>
-            <a href="dashboardhistory_user.php"><i class="fas fa-history"></i> Riwayat Membaca</a>
-
-            <a href="daftarakun.html" class="logout-button"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+                    <div class="sb-upload-loading" id="sbUploadLoading"><i class="fas fa-spinner"></i></div>
+                    <input type="file" id="sbInputFoto" name="foto" accept="image/jpeg,image/png,image/webp"
+                        style="display:none;">
+                </div>
+            </form>
+            <nav>
+                <a href="settingakun_baru.php" class="active"><i class="fas fa-user-cog"></i> <span>Profil</span></a>
+                <a href="dashboard_user.php"><i class="fas fa-tasks"></i> <span>Aktivitas Saya</span></a>
+                <a href="dashboardsimpan_user.php"><i class="fas fa-bookmark"></i> <span>Cerita Tersimpan</span></a>
+                <a href="dashboardsuka_user.php"><i class="fas fa-heart"></i> <span>Cerita Disukai</span></a>
+                <a href="dashboardulasan_user.php"><i class="fas fa-comment-alt"></i> <span>Riwayat Ulasan</span></a>
+                <a href="dashboardhistory_user.php"><i class="fas fa-history"></i> <span>Riwayat Membaca</span></a>
+            </nav>
         </div>
+        <script>
+            (function () {
+                var input = document.getElementById('sbInputFoto');
+                var form = document.getElementById('sbFormFoto');
+                var preview = document.getElementById('sbPreviewFoto');
+                var loading = document.getElementById('sbUploadLoading');
+                if (!input) return;
+                input.addEventListener('change', function () {
+                    var file = this.files[0];
+                    if (!file) return;
+                    if (file.size > 2 * 1024 * 1024) { alert('Ukuran foto maksimal 2MB.'); this.value = ''; return; }
+                    var reader = new FileReader();
+                    reader.onload = function (e) { preview.src = e.target.result; loading.classList.add('show'); form.submit(); };
+                    reader.readAsDataURL(file);
+                });
+            })();
+        </script>
 
+
+        <!-- CONTENT -->
         <div class="content">
-            <h1>Halo, Rangga</h1>
-            <form>
+            <h1>Halo, <?= htmlspecialchars($user['nama']) ?></h1>
+
+            <?php if ($pesan): ?>
+                <div class="alert <?= $pesan['tipe'] ?>"><?= $pesan['isi'] ?></div>
+            <?php endif; ?>
+
+            <!-- Form profil dengan flag aksi=profil -->
+            <form method="POST" action="">
+                <input type="hidden" name="aksi" value="profil">
+
                 <div class="form-group">
                     <label for="nama">Nama</label>
-                    <div class="input-with-icon">
-                        <input type="text" id="nama" value="Rangga">
+                    <div class="input-wrap">
+                        <input type="text" id="nama" name="nama" value="<?= htmlspecialchars($user['nama']) ?>"
+                            required>
                         <i class="fas fa-edit"></i>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <div class="input-with-icon">
-                        <input type="email" id="email" value="rangga123@gmail.com">
+                    <div class="input-wrap">
+                        <input type="email" id="email" name="email" value="<?= htmlspecialchars($user['email']) ?>"
+                            required>
                         <i class="fas fa-edit"></i>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <div class="input-with-icon">
-                        <input type="password" id="password" value=".....">
-                        <i class="fas fa-edit"></i>
+                    <label for="password">Password Baru</label>
+                    <div class="input-wrap">
+                        <input type="password" id="password" name="password"
+                            placeholder="Kosongkan jika tidak ingin mengubah">
+                        <i class="fas fa-eye" id="togglePw"></i>
                     </div>
                 </div>
-                <div class="form-group inline">
-                    <div>
-                        <label for="jenisKelamin">Jenis Kelamin</label>
-                        <select id="jenisKelamin">
-                            <option>Laki-Laki</option>
-                            <option>Perempuan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="negara">Negara</label>
-                        <select id="negara">
-                            <option>Indonesia</option>
-                        </select>
+
+                <div class="form-group">
+                    <div class="inline-group">
+                        <div>
+                            <label for="jenis_kelamin">Jenis Kelamin</label>
+                            <select id="jenis_kelamin">
+                                <option value="Laki-Laki">Laki-Laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="negara">Negara</label>
+                            <select id="negara">
+                                <option value="Indonesia">Indonesia</option>
+                                <option value="Malaysia">Malaysia</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
+
+                <button type="submit" class="btn-simpan">Simpan Perubahan</button>
             </form>
         </div>
     </div>
+
+    <script>
+        // Toggle password
+        document.getElementById('togglePw').addEventListener('click', function () {
+            const pw = document.getElementById('password');
+            const isHidden = pw.type === 'password';
+            pw.type = isHidden ? 'text' : 'password';
+            this.classList.toggle('fa-eye', !isHidden);
+            this.classList.toggle('fa-eye-slash', isHidden);
+        });
+    </script>
 </body>
 
 </html>
+<?php $conn->close(); ?>

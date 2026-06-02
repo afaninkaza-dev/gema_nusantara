@@ -1,21 +1,5 @@
 <?php
-session_start();
 include "koneksi.php";
-
-$user_id = $_SESSION['id'] ?? 0;
-$logged_in = $user_id > 0;
-
-// Ambil foto profil terbaru dari database
-$_nav_foto = 'img/profile.jpg';
-if ($logged_in) {
-    $_q_foto = $conn->prepare("SELECT foto FROM user WHERE id = ?");
-    $_q_foto->bind_param("i", $user_id);
-    $_q_foto->execute();
-    $_nav_user = $_q_foto->get_result()->fetch_assoc();
-    if (!empty($_nav_user['foto']) && file_exists($_nav_user['foto'])) {
-        $_nav_foto = $_nav_user['foto'];
-    }
-}
 
 // Handle search
 $search = isset($_GET['q']) ? trim($_GET['q']) : '';
@@ -39,18 +23,6 @@ if ($search !== '') {
         LEFT JOIN ulasan u ON c.id = u.cerita_id
         GROUP BY c.id ORDER BY c.id ASC
     ");
-}
-
-// Status like & simpan user
-$liked_ids = $saved_ids = [];
-if ($logged_in) {
-    $r = $conn->query("SELECT cerita_id FROM suka WHERE user_id = $user_id");
-    while ($row = $r->fetch_assoc())
-        $liked_ids[] = $row['cerita_id'];
-
-    $r = $conn->query("SELECT cerita_id FROM simpan WHERE user_id = $user_id");
-    while ($row = $r->fetch_assoc())
-        $saved_ids[] = $row['cerita_id'];
 }
 ?>
 <!DOCTYPE html>
@@ -108,9 +80,7 @@ if ($logged_in) {
             cursor: pointer;
         }
 
-        .logo img {
-            width: 40px;
-        }
+        .logo img { width: 40px; }
 
         .logo p {
             font-size: 13px;
@@ -140,74 +110,6 @@ if ($logged_in) {
         nav a.active {
             color: #000;
             font-weight: 700;
-        }
-
-        nav .profile {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform .2s;
-        }
-
-        nav .profile:hover {
-            transform: scale(1.1);
-        }
-
-        /* ── Dropdown profil ── */
-        .profile-dropdown {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-        }
-
-        .profile-dropdown .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: calc(100% + 10px);
-            right: 0;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, .15);
-            min-width: 180px;
-            padding: 8px 0;
-            z-index: 2000;
-        }
-
-        .profile-dropdown .dropdown-menu.open {
-            display: block;
-        }
-
-        .dropdown-menu a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            text-decoration: none;
-            transition: background .15s;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .dropdown-menu a:hover {
-            background: #f5f0ed;
-            color: #6D4A37;
-        }
-
-        .dropdown-menu a.keluar {
-            color: #C0392B;
-        }
-
-        .dropdown-menu a.keluar:hover {
-            background: #fdf0ee;
-        }
-
-        .dropdown-menu hr {
-            border: none;
-            border-top: 1px solid #eee;
-            margin: 4px 0;
         }
 
         .menu-icon {
@@ -241,7 +143,7 @@ if ($logged_in) {
             position: relative;
         }
 
-        .search-bar input {
+        .search-bar input[type="text"] {
             padding: 10px 15px;
             border: 1px solid #000;
             border-radius: 20px;
@@ -273,21 +175,21 @@ if ($logged_in) {
         .cerita-container {
             display: grid;
             grid-template-columns: repeat(4, 230px);
-            gap: 40px;
+            gap: 50px;
             justify-content: center;
-            margin: 50px auto 0;
-            padding: 0 40px 100px;
+            margin: 60px auto 0;
+            padding: 0 40px 120px;
         }
 
+        /* ── KARTU BUKU ── */
         .cerita-wrapper {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background: #6D4A36;
             color: #F7F4E9;
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            text-decoration: none;
+            gap: 5px;
             cursor: pointer;
             transition: transform .2s, box-shadow .2s;
         }
@@ -299,24 +201,23 @@ if ($logged_in) {
 
         .sampul {
             width: 100%;
-            height: 240px;
+            height: 250px;
             object-fit: cover;
         }
 
         .cerita-wrapper h2 {
             margin: 0;
             font-weight: 600;
-            font-size: 14px;
-            height: 55px;
+            font-size: 15px;
+            height: 60px;
             display: flex;
             align-items: center;
-            color: #F7F4E9;
         }
 
         .cerita-wrapper hr {
             margin: 0;
             border: none;
-            border-top: 1px solid rgba(247, 244, 233, .4);
+            border-top: 1px solid #F7F4E9;
         }
 
         .rating-row {
@@ -341,14 +242,6 @@ if ($logged_in) {
             transform: scale(1.2);
         }
 
-        .icon-aksi.liked {
-            color: #E74C3C !important;
-        }
-
-        .icon-aksi.saved {
-            color: #FFD700 !important;
-        }
-
         /* ── TOAST ── */
         #toast {
             position: fixed;
@@ -366,15 +259,14 @@ if ($logged_in) {
             z-index: 9999;
         }
 
-        #toast.show {
-            opacity: 1;
-        }
+        #toast.show { opacity: 1; }
 
         /* ── FOOTER ── */
         footer {
             background: #FFF5E7;
             font-family: "Inter", sans-serif;
             font-size: 14px;
+            margin-top: 60px;
         }
 
         .footer_top {
@@ -386,9 +278,7 @@ if ($logged_in) {
             margin: 0 auto;
         }
 
-        #tentang-web {
-            max-width: 420px;
-        }
+        #tentang-web { max-width: 420px; }
 
         #tentang-web p {
             margin-top: 12px;
@@ -414,9 +304,7 @@ if ($logged_in) {
             transition: color .2s;
         }
 
-        footer a:hover {
-            color: #6D4A37;
-        }
+        footer a:hover { color: #6D4A37; }
 
         .footer_bottom {
             padding: 1.5em 4%;
@@ -432,34 +320,20 @@ if ($logged_in) {
         }
 
         @media (max-width:1100px) {
-            .cerita-container {
-                grid-template-columns: repeat(3, 200px);
-                gap: 30px;
-            }
+            .cerita-container { grid-template-columns: repeat(3, 200px); gap: 30px; }
         }
 
         @media (max-width:750px) {
-            .cerita-container {
-                grid-template-columns: repeat(2, 200px);
-                gap: 24px;
-            }
-
-            .hero h2 {
-                font-size: 24px;
-            }
+            .cerita-container { grid-template-columns: repeat(2, 200px); gap: 24px; }
+            .hero h2 { font-size: 24px; }
         }
 
         @media (max-width:480px) {
-            .cerita-container {
-                grid-template-columns: repeat(1, 230px);
-            }
+            .cerita-container { grid-template-columns: repeat(1, 230px); }
         }
 
         @media (max-width:900px) {
-            .menu-icon {
-                display: block;
-            }
-
+            .menu-icon { display: block; }
             .nav-menu {
                 position: absolute;
                 top: 65px;
@@ -474,10 +348,7 @@ if ($logged_in) {
                 margin: 0;
                 display: none;
             }
-
-            .nav-menu.active {
-                display: flex;
-            }
+            .nav-menu.active { display: flex; }
         }
     </style>
 </head>
@@ -485,90 +356,64 @@ if ($logged_in) {
 <body>
 
     <nav>
-        <div class="logo" onclick="location.href='landingpage.php'">
+        <div class="logo" onclick="location.href='landingpage1.php'">
             <img src="img/logoweb.svg" alt="logo">
             <p>Gema<br>Nusantara</p>
         </div>
         <div class="menu-icon" id="menu-icon"><i class="ph ph-list"></i></div>
         <div class="nav-menu" id="nav-menu">
-            <a href="landingpage.php">Beranda</a>
-            <a class="active" href="jelajahi.php">Jelajahi</a>
-            <a href="saran.php">Saran</a>
-            <?php if ($logged_in): ?>
-                <div class="profile-dropdown">
-                    <img class="profile" src="<?= htmlspecialchars($_nav_foto) ?>" alt="profil" id="profileBtn" onclick="toggleDropdown()">
-                    <div class="dropdown-menu" id="profileDropdown">
-                        <a href="settingakun_baru.php">
-                            <i style="font-size:16px;width:18px;text-align:center;" class="fas fa-user"></i> Profil
-                        </a>
-                        <hr>
-                        <a href="masuk.php" class="keluar">
-                            <i style="font-size:16px;width:18px;text-align:center;" class="fas fa-sign-out-alt"></i> Keluar
-                        </a>
-                    </div>
-                </div>
-            <?php else: ?>
-                <a href="masuk.php">Masuk</a>
-            <?php endif; ?>
+            <a href="landingpage1.php">Beranda</a>
+            <a class="active" href="jelajahi_belumlogin.php">Jelajahi</a>
+            <img class="profile" src="img/profile.svg" alt="profil" onclick="location.href='masuk.php'"
+                style="width:35px;height:35px;border-radius:50%;cursor:pointer;transition:transform .2s;"
+                onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"
+                title="Masuk">
         </div>
     </nav>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        crossorigin="anonymous" />
+
     <script>
         document.getElementById('menu-icon').addEventListener('click', () => {
             document.getElementById('nav-menu').classList.toggle('active');
-        });
-        function toggleDropdown() {
-            const dd = document.getElementById('profileDropdown');
-            dd.classList.toggle('open');
-        }
-        document.addEventListener('click', function (e) {
-            const btn = document.getElementById('profileBtn');
-            const dd = document.getElementById('profileDropdown');
-            if (dd && btn && !btn.contains(e.target) && !dd.contains(e.target)) {
-                dd.classList.remove('open');
-            }
         });
     </script>
 
     <section class="hero">
         <h2>Menyelami Kisah Tradisi dalam Genggaman Tangan</h2>
-        <form class="search-bar" method="GET" action="jelajahi.php">
-            <input type="text" name="q" placeholder="Telusuri judul buku" value="<?= htmlspecialchars($search) ?>">
+        <form class="search-bar" method="GET" action="jelajahi_belumlogin.php">
+            <input type="text" name="q" placeholder="Telusuri judul buku"
+                value="<?= htmlspecialchars($search) ?>">
             <button type="submit"><i class="fas fa-search"></i></button>
         </form>
     </section>
 
     <div class="cerita-container">
         <?php if ($result && $result->num_rows > 0): ?>
-            <?php while ($data = $result->fetch_assoc()):
-                $liked = in_array($data['id'], $liked_ids);
-                $saved = in_array($data['id'], $saved_ids);
-                ?>
-                <div class="cerita-wrapper" onclick="location.href='detailbuku.php?id=<?= $data['id'] ?>'">
+            <?php while ($data = $result->fetch_assoc()): ?>
+                <!-- Klik kartu → redirect ke masuk.php agar login dulu -->
+                <div class="cerita-wrapper" onclick="redirectMasuk()">
                     <img class="sampul" src="buku/<?= htmlspecialchars($data['sampul']) ?>"
                         alt="<?= htmlspecialchars($data['judul']) ?>">
                     <h2><?= htmlspecialchars($data['judul']) ?></h2>
                     <hr>
                     <div class="rating-row">
                         <span>⭐</span>
-                        <span
-                            class="rating-number"><?= $data['avg_rating'] ? number_format($data['avg_rating'], 1) : '0.0' ?></span>
-                        <span class="material-icons icon-aksi btn-like <?= $liked ? 'liked' : '' ?>"
-                            data-id="<?= $data['id'] ?>" onclick="event.stopPropagation(); toggleKartu(this,'like')">
-                            <?= $liked ? 'favorite' : 'favorite_border' ?>
+                        <span class="rating-number">
+                            <?= $data['avg_rating'] ? number_format($data['avg_rating'], 1) : '0.0' ?>
                         </span>
-                        <span class="material-icons icon-aksi btn-simpan <?= $saved ? 'saved' : '' ?>"
-                            data-id="<?= $data['id'] ?>" onclick="event.stopPropagation(); toggleKartu(this,'simpan')">
-                            <?= $saved ? 'bookmark' : 'bookmark_border' ?>
-                        </span>
+                        <!-- Ikon suka & simpan → redirect masuk.php -->
+                        <span class="material-icons icon-aksi"
+                            onclick="event.stopPropagation(); redirectMasuk()">favorite_border</span>
+                        <span class="material-icons icon-aksi"
+                            onclick="event.stopPropagation(); redirectMasuk()">bookmark_border</span>
                     </div>
                 </div>
             <?php endwhile; ?>
         <?php else: ?>
             <div style="grid-column:1/-1;text-align:center;padding:60px;color:#94A3B8;">
                 <p style="font-size:48px;">📚</p>
-                <p style="margin-top:12px;font-size:16px;">Cerita "<?= htmlspecialchars($search) ?>" tidak ditemukan.</p>
+                <p style="margin-top:12px;font-size:16px;">
+                    Cerita "<?= htmlspecialchars($search) ?>" tidak ditemukan.
+                </p>
             </div>
         <?php endif; ?>
     </div>
@@ -585,9 +430,8 @@ if ($logged_in) {
             <div id="navigasi">
                 <h3>Navigasi</h3>
                 <ul>
-                    <li><a href="landingpage.php">Beranda</a></li>
-                    <li><a href="jelajahi.php">Jelajahi</a></li>
-                    <li><a href="saran.php">Saran</a></li>
+                    <li><a href="landingpage1.php">Beranda</a></li>
+                    <li><a href="jelajahi_belumlogin.php">Jelajahi</a></li>
                 </ul>
             </div>
             <div id="kontak">
@@ -609,7 +453,10 @@ if ($logged_in) {
     <div id="toast"></div>
 
     <script>
-        const LOGGED_IN = <?= $logged_in ? 'true' : 'false' ?>;
+        function redirectMasuk() {
+            showToast('Silakan masuk terlebih dahulu');
+            setTimeout(() => { window.location.href = 'masuk.php'; }, 1000);
+        }
 
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -617,31 +464,8 @@ if ($logged_in) {
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2500);
         }
-
-        async function toggleKartu(el, jenis) {
-            if (!LOGGED_IN) { showToast('Silakan masuk terlebih dahulu'); return; }
-            const ceritaId = el.dataset.id;
-            const aksi = jenis === 'like' ? 'toggle_like' : 'toggle_simpan';
-            const fd = new FormData();
-            fd.append('aksi', aksi);
-            fd.append('cerita_id', ceritaId);
-
-            const res = await fetch('aksi_user.php', { method: 'POST', body: fd });
-            const data = await res.json();
-            if (data.status === 'error') { showToast(data.message); return; }
-
-            if (jenis === 'like') {
-                el.classList.toggle('liked', data.liked);
-                el.textContent = data.liked ? 'favorite' : 'favorite_border';
-                showToast(data.liked ? 'Ditambahkan ke Cerita Disukai' : 'Dihapus dari Cerita Disukai');
-            } else {
-                el.classList.toggle('saved', data.saved);
-                el.textContent = data.saved ? 'bookmark' : 'bookmark_border';
-                showToast(data.saved ? 'Ditambahkan ke Cerita Tersimpan' : 'Dihapus dari Cerita Tersimpan');
-            }
-        }
     </script>
-</body>
 
+</body>
 </html>
 <?php $conn->close(); ?>

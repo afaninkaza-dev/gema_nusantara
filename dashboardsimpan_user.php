@@ -1,3 +1,82 @@
+<?php
+session_start();
+include 'koneksi.php';
+
+if (!isset($_SESSION['id'])) {
+    header("Location: masuk.php");
+    exit;
+}
+
+$user_id = $_SESSION['id'];
+$active_page = 'simpan';
+
+// Hapus simpan jika ada request
+if (isset($_GET['hapus']) && is_numeric($_GET['hapus'])) {
+    $cerita_id = (int) $_GET['hapus'];
+    $q_hapus = $conn->prepare("DELETE FROM simpan WHERE user_id = ? AND cerita_id = ?");
+    $q_hapus->bind_param("ii", $user_id, $cerita_id);
+    $q_hapus->execute();
+    header("Location: dashboardsimpan_user.php");
+    exit;
+}
+
+// Pagination
+$per_halaman = 8;
+$halaman = isset($_GET['halaman']) && is_numeric($_GET['halaman']) ? (int) $_GET['halaman'] : 1;
+$offset = ($halaman - 1) * $per_halaman;
+
+// Hitung total
+$q_total = $conn->prepare("SELECT COUNT(*) AS total FROM simpan WHERE user_id = ?");
+$q_total->bind_param("i", $user_id);
+$q_total->execute();
+$total_data = $q_total->get_result()->fetch_assoc()['total'];
+$total_halaman = ceil($total_data / $per_halaman);
+
+// Ambil cerita tersimpan
+$q = $conn->prepare("
+    SELECT cr.id, cr.judul, cr.sampul, ROUND(AVG(u.rating),1) AS avg_rating
+    FROM simpan s
+    JOIN cerita_rakyat cr ON s.cerita_id = cr.id
+    LEFT JOIN ulasan u ON cr.id = u.cerita_id
+    WHERE s.user_id = ?
+    GROUP BY cr.id, cr.judul, cr.sampul
+    ORDER BY s.waktu DESC
+    LIMIT ? OFFSET ?
+");
+$q->bind_param("iii", $user_id, $per_halaman, $offset);
+$q->execute();
+$result = $q->get_result();
+
+// Handle upload foto sidebar — harus di atas sebelum HTML dikirim
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'foto_sidebar') {
+    // Ambil data user untuk keperluan hapus foto lama
+    $_sbq = $conn->prepare("SELECT foto FROM user WHERE id = ?");
+    $_sbq->bind_param("i", $user_id);
+    $_sbq->execute();
+    $_sb_old = $_sbq->get_result()->fetch_assoc();
+
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+        $allowed = ['image/jpeg', 'image/png', 'image/webp'];
+        $ftype = mime_content_type($_FILES['foto']['tmp_name']);
+        if (in_array($ftype, $allowed) && $_FILES['foto']['size'] <= 2 * 1024 * 1024) {
+            $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+            $filename = 'foto_' . $user_id . '_' . time() . '.' . $ext;
+            $target = 'img/profil/' . $filename;
+            if (!is_dir('img/profil'))
+                mkdir('img/profil', 0755, true);
+            if (move_uploaded_file($_FILES['foto']['tmp_name'], $target)) {
+                if (!empty($_sb_old['foto']) && $_sb_old['foto'] !== 'img/profile.jpg' && file_exists($_sb_old['foto']))
+                    unlink($_sb_old['foto']);
+                $upd = $conn->prepare("UPDATE user SET foto=? WHERE id=?");
+                $upd->bind_param("si", $target, $user_id);
+                $upd->execute();
+            }
+        }
+    }
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -24,17 +103,13 @@
             min-height: 100vh;
         }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-        }
 
         /* ── SIDEBAR ── */
         .sidebar {
             width: 220px;
             background-color: #fff;
             padding: 24px 16px 20px;
-            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.06);
+            box-shadow: 2px 0 8px rgba(0, 0, 0, .06);
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -45,57 +120,96 @@
             overflow-y: auto;
         }
 
-        .logo {
+        .sb-logo {
             display: flex;
             align-items: center;
             gap: 10px;
             margin-bottom: 28px;
-            cursor: pointer;
             text-decoration: none;
         }
 
-        .logo img {
+        .sb-logo img {
             width: 36px;
-            height: 36px;
         }
 
-        .logo-text {
+        .sb-logo-text {
             font-size: 15px;
             font-weight: 600;
             color: #6D4A37;
             line-height: 1.25;
         }
 
-        .profile-wrapper {
-            position: relative;
+        .sb-profile-form {
             align-self: center;
             margin-bottom: 28px;
         }
 
-        .profile-wrapper img {
+        .sb-profile-wrap {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .sb-profile-wrap img {
             width: 100px;
             height: 100px;
             border-radius: 50%;
             object-fit: cover;
             display: block;
-            background: #f0e8e2;
         }
 
-        .edit-icon {
+        .sb-overlay {
             position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: #fff;
+            inset: 0;
             border-radius: 50%;
-            width: 26px;
-            height: 26px;
+            background: rgba(0, 0, 0, 0);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
-            font-size: 11px;
-            color: #555;
+            transition: background .2s;
+        }
+
+        .sb-profile-wrap:hover .sb-overlay {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .sb-overlay i {
+            color: #fff;
+            font-size: 20px;
+            opacity: 0;
+            transition: opacity .2s;
+        }
+
+        .sb-profile-wrap:hover .sb-overlay i {
+            opacity: 1;
+        }
+
+        .sb-upload-loading {
+            display: none;
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sb-upload-loading.show {
+            display: flex;
+        }
+
+        .sb-upload-loading i {
+            color: #fff;
+            font-size: 22px;
+            animation: sb-spin 1s linear infinite;
+        }
+
+        @keyframes sb-spin {
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .sidebar nav {
@@ -115,7 +229,7 @@
             font-size: 13.5px;
             font-weight: 400;
             border-radius: 8px;
-            transition: background 0.2s, color 0.2s;
+            transition: background .2s, color .2s;
         }
 
         .sidebar a i {
@@ -131,22 +245,56 @@
         }
 
         .sidebar a.active {
-            background: #6D4A37;
+            background: #6D4A36;
             color: #fff;
             font-weight: 500;
         }
 
-        .logout-button {
+        .sidebar .logout-btn {
             margin-top: auto;
             color: #C0392B !important;
             font-weight: 500 !important;
         }
 
-        .logout-button:hover {
+        .sidebar .logout-btn:hover {
             background: #fdf0ee !important;
         }
 
-        /* ── CONTENT ── */
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 60px;
+                padding: 16px 8px;
+            }
+
+            .sb-logo-text,
+            .sidebar a span {
+                display: none;
+            }
+
+            .sidebar a {
+                padding: 10px;
+                justify-content: center;
+                gap: 0;
+            }
+
+            .sidebar a i {
+                width: auto;
+                font-size: 18px;
+            }
+
+            .sb-profile-wrap,
+            .sb-profile-wrap img {
+                width: 40px;
+                height: 40px;
+            }
+
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
         .content {
             flex: 1;
             padding: 36px;
@@ -161,14 +309,12 @@
             text-align: center;
         }
 
-        /* ── CARD GRID ── */
         .cerita_container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
 
-        /* ── CARD ── */
         .cerita_wrapper {
             background-color: #6D4A36;
             color: #F7F4E9;
@@ -179,6 +325,7 @@
             gap: 8px;
             cursor: pointer;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
         }
 
         .cerita_wrapper:hover {
@@ -212,7 +359,6 @@
             margin: 0;
         }
 
-        /* Rating Row */
         .rating {
             display: flex;
             align-items: center;
@@ -241,31 +387,10 @@
             transform: scale(1.25);
         }
 
-        .icon-small.liked {
-            color: #E74C3C;
-            animation: pop 0.25s ease;
-        }
-
         .icon-small.saved {
             color: #FFD700;
-            animation: pop 0.25s ease;
         }
 
-        @keyframes pop {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.4);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -304,60 +429,16 @@
             border-color: #c8a898;
         }
 
-        .pagination .dots {
-            border: none;
-            background: transparent;
+        .kosong {
+            text-align: center;
             color: #999;
-            pointer-events: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 1300px) {
-            .cerita_container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (max-width: 960px) {
-            .cerita_container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            font-size: 14px;
+            padding: 60px 0;
         }
 
         @media (max-width: 700px) {
-            .sidebar {
-                width: 60px;
-                padding: 16px 8px;
-            }
-
-            .logo-text,
-            .sidebar a span {
-                display: none;
-            }
-
-            .sidebar a {
-                padding: 10px;
-                justify-content: center;
-                gap: 0;
-            }
-
-            .sidebar a i {
-                width: auto;
-                margin: 0;
-                font-size: 18px;
-            }
-
-            .profile-wrapper img {
-                width: 40px;
-                height: 40px;
-            }
-
-            .logo img {
-                width: 32px;
-            }
-
-            .edit-icon {
-                display: none;
+            .cerita_container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -365,180 +446,99 @@
 
 <body>
     <div class="container">
+        <?php
+        // ── Sidebar inline ──
+        $_sb = $conn->prepare("SELECT nama, foto FROM user WHERE id = ?");
+        $_sb->bind_param("i", $user_id);
+        $_sb->execute();
+        $_sb_user = $_sb->get_result()->fetch_assoc();
+        $_foto_src = (!empty($_sb_user['foto']) && file_exists($_sb_user['foto']))
+            ? $_sb_user['foto'] : 'img/profile.jpg';
 
-        <!-- SIDEBAR -->
+        // Handle upload foto dari sidebar
+        
+        ?>
         <div class="sidebar">
-            <a href="landingpage.php" class="logo">
+            <a href="landingpage.php" class="sb-logo">
                 <img src="img/logoweb.svg" alt="logo">
-                <span class="logo-text">Gema<br>Nusantara</span>
+                <span class="sb-logo-text">Gema<br>Nusantara</span>
             </a>
-            <div class="profile-wrapper">
-                <img src="img/profile22.svg" alt="Foto Profil">
-                <div class="edit-icon"><i class="fas fa-pen"></i></div>
-            </div>
+            <form id="sbFormFoto" class="sb-profile-form" method="POST" enctype="multipart/form-data" action="">
+                <input type="hidden" name="aksi" value="foto_sidebar">
+                <div class="sb-profile-wrap">
+                    <img src="<?= htmlspecialchars($_foto_src) ?>" alt="Foto Profil" id="sbPreviewFoto">
+                    <label for="sbInputFoto" class="sb-overlay" title="Ganti foto"><i class="fas fa-camera"></i></label>
+
+                    <div class="sb-upload-loading" id="sbUploadLoading"><i class="fas fa-spinner"></i></div>
+                    <input type="file" id="sbInputFoto" name="foto" accept="image/jpeg,image/png,image/webp"
+                        style="display:none;">
+                </div>
+            </form>
             <nav>
-                <a href="settingakun_baru.php"><i class="fas fa-user-cog"></i> <span>Pengaturan Akun</span></a>
+                <a href="settingakun_baru.php"><i class="fas fa-user-cog"></i> <span>Profil</span></a>
                 <a href="dashboard_user.php"><i class="fas fa-tasks"></i> <span>Aktivitas Saya</span></a>
                 <a href="dashboardsimpan_user.php" class="active"><i class="fas fa-bookmark"></i> <span>Cerita
                         Tersimpan</span></a>
                 <a href="dashboardsuka_user.php"><i class="fas fa-heart"></i> <span>Cerita Disukai</span></a>
                 <a href="dashboardulasan_user.php"><i class="fas fa-comment-alt"></i> <span>Riwayat Ulasan</span></a>
                 <a href="dashboardhistory_user.php"><i class="fas fa-history"></i> <span>Riwayat Membaca</span></a>
-                <a href="masuk.php" class="logout-button"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
+                <a href="keluar.php" class="logout-btn"><i class="fas fa-sign-out-alt"></i> <span>Keluar</span></a>
             </nav>
         </div>
+        <script>
+            (function () {
+                var input = document.getElementById('sbInputFoto');
+                var form = document.getElementById('sbFormFoto');
+                var preview = document.getElementById('sbPreviewFoto');
+                var loading = document.getElementById('sbUploadLoading');
+                if (!input) return;
+                input.addEventListener('change', function () {
+                    var file = this.files[0];
+                    if (!file) return;
+                    if (file.size > 2 * 1024 * 1024) { alert('Ukuran foto maksimal 2MB.'); this.value = ''; return; }
+                    var reader = new FileReader();
+                    reader.onload = function (e) { preview.src = e.target.result; loading.classList.add('show'); form.submit(); };
+                    reader.readAsDataURL(file);
+                });
+            })();
+        </script>
 
-        <!-- CONTENT -->
+
         <div class="content">
             <h1>Cerita yang Kamu Simpan</h1>
-
-            <div class="cerita_container">
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritakeong.svg" alt="Keong Mas">
-                    <h2>Keong Mas</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.6</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
+            <?php if ($result && $result->num_rows > 0): ?>
+                <div class="cerita_container">
+                    <?php while ($cr = $result->fetch_assoc()): ?>
+                        <a class="cerita_wrapper" href="detailbuku.php?id=<?= $cr['id'] ?>">
+                            <img class="sampul" src="buku/<?= htmlspecialchars($cr['sampul']) ?>"
+                                alt="<?= htmlspecialchars($cr['judul']) ?>">
+                            <h2><?= htmlspecialchars($cr['judul']) ?></h2>
+                            <hr>
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-number"><?= $cr['avg_rating'] ?? '-' ?></span>
+                                <i class="fas fa-bookmark icon-small saved" title="Hapus Simpanan"
+                                    onclick="event.preventDefault(); window.location='dashboardsimpan_user.php?hapus=<?= $cr['id'] ?>'"></i>
+                            </div>
+                        </a>
+                    <?php endwhile; ?>
                 </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritabawang.svg" alt="Bawang Merah dan Bawang Putih">
-                    <h2>Bawang Merah dan Bawang Putih</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.5</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
+                <?php if ($total_halaman > 1): ?>
+                    <div class="pagination">
+                        <?php if ($halaman > 1): ?><a href="?halaman=<?= $halaman - 1 ?>">&laquo;</a><?php endif; ?>
+                        <?php for ($i = 1; $i <= $total_halaman; $i++): ?>
+                            <a href="?halaman=<?= $i ?>" <?= $i == $halaman ? 'class="active"' : '' ?>><?= $i ?></a>
+                        <?php endfor; ?>
+                        <?php if ($halaman < $total_halaman): ?><a
+                                href="?halaman=<?= $halaman + 1 ?>">&raquo;</a><?php endif; ?>
                     </div>
-                </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritabiwar.svg" alt="Biwar dan Naga">
-                    <h2>Biwar dan Naga</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.4</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
-                </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritaabo.svg" alt="Abo Mamongkuroit">
-                    <h2>Abo Mamongkuroit Dan Tulap Si Raksasa</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.4</span>
-                        <i class="fas fa-heart icon-small btn-like liked" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
-                </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritatimun.svg" alt="Timun Mas">
-                    <h2>Timun Mas</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.7</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
-                </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritapangeran.svg" alt="Pangeran Amat Mude">
-                    <h2>Pangeran Amat Mude</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">3.9</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
-                </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritabatu.svg" alt="Batu Golog">
-                    <h2>Batu Golog</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.4</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
-                </div>
-
-                <div class="cerita_wrapper">
-                    <img class="sampul" src="img/ceritakelingking.svg" alt="Si Kelingking">
-                    <h2>Si Kelingking</h2>
-                    <hr>
-                    <div class="rating">
-                        <i class="fas fa-star star"></i>
-                        <span class="rating-number">4.4</span>
-                        <i class="fas fa-heart icon-small btn-like" title="Suka"></i>
-                        <i class="fas fa-bookmark icon-small btn-save saved" title="Simpan"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="pagination">
-                <a href="#">&laquo;</a>
-                <a href="#" class="active">1</a>
-                <a href="#">2</a>
-                <a href="#">3</a>
-                <span class="dots">...</span>
-                <a href="#">7</a>
-                <a href="#">8</a>
-                <a href="#">&raquo;</a>
-            </div>
+                <?php endif; ?>
+            <?php else: ?>
+                <p class="kosong">Belum ada cerita yang disimpan.</p>
+            <?php endif; ?>
         </div>
     </div>
-
-    <script>
-        document.querySelectorAll('.btn-like').forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                this.classList.toggle('liked');
-                const title = this.closest('.cerita_wrapper')?.querySelector('h2').textContent.trim() || '';
-                let liked = JSON.parse(localStorage.getItem('liked') || '[]');
-                if (this.classList.contains('liked')) {
-                    if (!liked.includes(title)) liked.push(title);
-                } else {
-                    liked = liked.filter(t => t !== title);
-                }
-                localStorage.setItem('liked', JSON.stringify(liked));
-            });
-        });
-
-        document.querySelectorAll('.btn-save').forEach(btn => {
-            btn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                this.classList.toggle('saved');
-                const card = this.closest('.cerita_wrapper');
-                const title = card?.querySelector('h2').textContent.trim() || '';
-                let saved = JSON.parse(localStorage.getItem('saved') || '[]');
-                if (this.classList.contains('saved')) {
-                    if (!saved.includes(title)) saved.push(title);
-                } else {
-                    saved = saved.filter(t => t !== title);
-                    // Hapus card dari halaman simpan jika di-unsave
-                    if (card) card.remove();
-                }
-                localStorage.setItem('saved', JSON.stringify(saved));
-            });
-        });
-    </script>
 </body>
 
 </html>
+<?php $conn->close(); ?>

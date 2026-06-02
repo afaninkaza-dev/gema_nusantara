@@ -3,15 +3,19 @@ session_start();
 include "koneksi.php";
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-$sort = isset($_GET['sort']) ? $_GET['sort'] : 'id';
+$sort_key = isset($_GET['sort']) ? $_GET['sort'] : 'id';
 $order = isset($_GET['order']) && $_GET['order'] === 'asc' ? 'asc' : 'desc';
 $perPage = 10;
 $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
 $offset = ($page - 1) * $perPage;
 
-$allowed_sort = ['id', 'nama', 'tanggal'];
-if (!in_array($sort, $allowed_sort))
-    $sort = 'id';
+// Map sort key ke nama kolom lengkap (dengan prefix tabel)
+$sort_map = [
+    'id'      => 'saran.id',
+    'nama'    => 'user.nama',
+    'tanggal' => 'saran.waktu',
+];
+$sort = isset($sort_map[$sort_key]) ? $sort_map[$sort_key] : 'saran.id';
 
 // Hapus saran
 if (isset($_GET['hapus'])) {
@@ -26,20 +30,34 @@ $where = "WHERE 1=1";
 $params = [];
 $types = '';
 if ($search !== '') {
-    $where .= " AND (nama LIKE ? OR isi_saran LIKE ?)";
+    $where .= " AND (user.nama LIKE ? OR saran.isi_saran LIKE ?)";
     $like = "%$search%";
     $params = [$like, $like];
     $types = 'ss';
 }
 
-$stmt_count = $conn->prepare("SELECT COUNT(*) AS total FROM saran $where");
+// Query COUNT dengan JOIN
+$stmt_count = $conn->prepare(
+    "SELECT COUNT(*) AS total 
+     FROM saran 
+     LEFT JOIN user ON saran.user_id = user.id 
+     $where"
+);
 if ($types)
     $stmt_count->bind_param($types, ...$params);
 $stmt_count->execute();
 $totalData = $stmt_count->get_result()->fetch_assoc()['total'];
 $totalPages = max(1, ceil($totalData / $perPage));
 
-$stmt = $conn->prepare("SELECT * FROM saran $where ORDER BY $sort $order LIMIT ? OFFSET ?");
+// Query data dengan JOIN
+$stmt = $conn->prepare(
+    "SELECT saran.id, saran.user_id, saran.isi_saran, saran.waktu, user.nama 
+     FROM saran 
+     LEFT JOIN user ON saran.user_id = user.id 
+     $where 
+     ORDER BY $sort $order 
+     LIMIT ? OFFSET ?"
+);
 $all_params = array_merge($params, [$perPage, $offset]);
 $all_types = $types . 'ii';
 $stmt->bind_param($all_types, ...$all_params);
@@ -262,7 +280,6 @@ function pageUrl($p)
             color: #1e293b;
         }
 
-        /* Sort bar */
         .sort-bar {
             display: flex;
             gap: 8px;
@@ -337,6 +354,11 @@ function pageUrl($p)
         .isi-cell {
             color: #475569;
             max-width: 500px;
+        }
+
+        .nama-fallback {
+            color: #94a3b8;
+            font-style: italic;
         }
 
         .aksi-cell a {
@@ -442,7 +464,7 @@ function pageUrl($p)
                         value="<?= htmlspecialchars($search) ?>">
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </div>
-                <input type="hidden" name="sort" value="<?= htmlspecialchars($sort) ?>">
+                <input type="hidden" name="sort" value="<?= htmlspecialchars($sort_key) ?>">
                 <input type="hidden" name="order" value="<?= htmlspecialchars($order) ?>">
             </div>
         </form>
@@ -452,11 +474,11 @@ function pageUrl($p)
                 <h2>Daftar Saran (<?= $totalData ?>)</h2>
                 <div class="sort-bar">
                     <span>Urutkan:</span>
-                    <a href="<?= sortUrl('id') ?>" class="<?= $sort === 'id' ? 'active-sort' : '' ?>">Terbaru
+                    <a href="<?= sortUrl('id') ?>" class="<?= $sort_key === 'id' ? 'active-sort' : '' ?>">Terbaru
                         <?= sortIcon('id') ?></a>
-                    <a href="<?= sortUrl('nama') ?>" class="<?= $sort === 'nama' ? 'active-sort' : '' ?>">Nama
+                    <a href="<?= sortUrl('nama') ?>" class="<?= $sort_key === 'nama' ? 'active-sort' : '' ?>">Nama
                         <?= sortIcon('nama') ?></a>
-                    <a href="<?= sortUrl('tanggal') ?>" class="<?= $sort === 'tanggal' ? 'active-sort' : '' ?>">Tanggal
+                    <a href="<?= sortUrl('tanggal') ?>" class="<?= $sort_key === 'tanggal' ? 'active-sort' : '' ?>">Tanggal
                         <?= sortIcon('tanggal') ?></a>
                 </div>
             </div>
@@ -478,8 +500,14 @@ function pageUrl($p)
                         while ($row = $result->fetch_assoc()): ?>
                             <tr>
                                 <td><?= $no++ ?></td>
-                                <td><?= htmlspecialchars($row['nama']) ?></td>
-                                <td><?= date('d/m/Y', strtotime($row['tanggal'])) ?></td>
+                                <td>
+                                    <?php if (!empty($row['nama'])): ?>
+                                        <?= htmlspecialchars($row['nama']) ?>
+                                    <?php else: ?>
+                                        <span class="nama-fallback">Pengguna dihapus</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?= date('d/m/Y', strtotime($row['waktu'])) ?></td>
                                 <td class="isi-cell">"<?= htmlspecialchars($row['isi_saran']) ?>"</td>
                                 <td class="aksi-cell">
                                     <a href="<?= pageUrl($page) ?>&hapus=<?= $row['id'] ?>"
