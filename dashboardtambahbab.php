@@ -1,5 +1,12 @@
 <?php
+session_start();
 include "koneksi.php";
+
+// Cek session & role admin
+if (!isset($_SESSION['id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: masuk.php");
+    exit;
+}
 
 $cerita_id = isset($_GET['cerita_id']) ? (int) $_GET['cerita_id'] : 0;
 
@@ -262,6 +269,20 @@ $nomor_bab_baru = $total + 1;
 
             <h1>Tambah Bab Baru</h1>
             <p class="sub-title">Tambahkan bab baru untuk cerita "<?= htmlspecialchars($cerita['judul']); ?>".</p>
+
+            <?php if (isset($_GET['status'])): ?>
+                <?php if ($_GET['status'] === 'gagal'): ?>
+                    <div
+                        style="background:#FEE2E2;color:#991B1B;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;border:1px solid #FECACA;">
+                        ⚠️ Gagal menyimpan bab. Pastikan judul dan isi bab sudah terisi.
+                    </div>
+                <?php elseif ($_GET['status'] === 'sukses'): ?>
+                    <div
+                        style="background:#DCFCE7;color:#166534;padding:12px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;border:1px solid #BBF7D0;">
+                        ✅ Bab berhasil disimpan!
+                    </div>
+                <?php endif; ?>
+            <?php endif; ?>
 
             <div class="cerita-info">
                 Cerita: <span><?= htmlspecialchars($cerita['judul']); ?></span>

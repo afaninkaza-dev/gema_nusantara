@@ -216,7 +216,7 @@
     <div class="container">
         <aside class="navbar">
             <div class="logo">
-                <img src="logoweb.svg" alt="Logo">
+                <img src="img/logoweb.svg" alt="Logo">
             </div>
         </aside>
 

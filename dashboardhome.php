@@ -22,15 +22,15 @@ $nama_hari   = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
 for ($i = 0; $i < 7; $i++) {
     $tanggal = date('Y-m-d', strtotime("monday this week +$i days"));
     $hari_labels[] = $nama_hari[$i];
-    $r = $conn->prepare("SELECT COUNT(*) AS total FROM koleksi WHERE DATE(waktu)=?");
+    $r = $conn->prepare("SELECT COUNT(*) AS total FROM simpan WHERE DATE(waktu)=?");
     $r->bind_param("s", $tanggal);
     $r->execute();
     $hari_data[] = (int)$r->get_result()->fetch_assoc()['total'];
 }
 
 // Total pengunjung bulan ini vs bulan lalu (dari koleksi)
-$pengunjung_bulan_ini  = $conn->query("SELECT COUNT(*) AS total FROM koleksi WHERE MONTH(waktu)=MONTH(NOW()) AND YEAR(waktu)=YEAR(NOW())")->fetch_assoc()['total'];
-$pengunjung_bulan_lalu = $conn->query("SELECT COUNT(*) AS total FROM koleksi WHERE MONTH(waktu)=MONTH(NOW())-1 AND YEAR(waktu)=YEAR(NOW())")->fetch_assoc()['total'];
+$pengunjung_bulan_ini  = $conn->query("SELECT COUNT(*) AS total FROM simpan WHERE MONTH(waktu)=MONTH(NOW()) AND YEAR(waktu)=YEAR(NOW())")->fetch_assoc()['total'];
+$pengunjung_bulan_lalu = $conn->query("SELECT COUNT(*) AS total FROM simpan WHERE MONTH(waktu)=MONTH(NOW())-1 AND YEAR(waktu)=YEAR(NOW())")->fetch_assoc()['total'];
 $persen_pengunjung = $pengunjung_bulan_lalu > 0
     ? round((($pengunjung_bulan_ini - $pengunjung_bulan_lalu) / $pengunjung_bulan_lalu) * 100, 1)
     : 0;

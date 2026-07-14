@@ -498,7 +498,7 @@ $isi_bab1 = $bab_pertama['isi'] ?? '';
                     <div class="editor-wrapper">
                         <div id="editor" class="editor-content" contenteditable="true"><?= $isi_bab1; ?></div>
                     </div>
-                    <textarea name="isi_cerita" id="isi_cerita_hidden"></textarea>
+                    <textarea name="isi_cerita" id="isi_cerita_hidden" style="display:none;"></textarea>
                 </div>
             </div>
 
@@ -563,6 +563,15 @@ $isi_bab1 = $bab_pertama['isi'] ?? '';
     </div>
 
     <script>
+        // Isi hidden textarea saat halaman pertama load
+        document.getElementById('isi_cerita_hidden').value =
+            document.getElementById('editor').innerHTML;
+
+        // Update setiap kali editor diketik
+        document.getElementById('editor').addEventListener('input', function () {
+            document.getElementById('isi_cerita_hidden').value = this.innerHTML;
+        });
+
         // Data semua bab
         const babData = <?= $bab_json; ?>;
 

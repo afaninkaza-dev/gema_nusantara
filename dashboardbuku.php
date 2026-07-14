@@ -439,8 +439,7 @@ function pageUrl($p)
                 <select name="filter" class="filter-select" onchange="this.form.submit()">
                     <option value="">Semua Daerah</option>
                     <?php while ($f = $filter_result->fetch_assoc()): ?>
-                        <option value="<?= htmlspecialchars($f['asal_daerah']) ?>"
-                            <?= $filter === $f['asal_daerah'] ? 'selected' : '' ?>>
+                        <option value="<?= htmlspecialchars($f['asal_daerah']) ?>" <?= $filter === $f['asal_daerah'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($f['asal_daerah']) ?>
                         </option>
                     <?php endwhile; ?>
@@ -479,7 +478,7 @@ function pageUrl($p)
                             </td>
                             <td class="sampul-cell"><img src="buku/<?= htmlspecialchars($row['sampul']) ?>" alt="sampul"></td>
                             <td><?= date('d/m/Y', strtotime($row['waktu'])) ?></td>
-                            <td><?= htmlspecialchars($row['nama_pembuat'] ?? 'Admin') ?></td>
+                            <td><span class="badge" style="background:#EFF6FF;color:#1D4ED8;">Admin</span></td>
                             <td class="aksi-cell">
                                 <a href="dashboardeditcerita.php?id=<?= $row['id'] ?>" title="Edit"><i
                                         class="fas fa-pen"></i></a>
